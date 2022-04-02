@@ -10,10 +10,58 @@
     "prepare": "husky install"
   },
   "eslintConfig": {
+    "env": {
+      "browser": true,
+      "es2021": true
+    },
     "extends": [
+      "eslint:recommended",
       "react-app",
-      "react-app/jest"
-    ]
+      "react-app/jest",
+      "prettier"
+    ],
+    "parserOptions": {
+      "ecmaFeatures": {
+        "jsx": true
+      },
+      "ecmaVersion": "latest",
+      "sourceType": "module"
+    },
+    "rules": {
+      "no-duplicate-imports": "error",
+      "no-use-before-define": "error",
+
+      "camelcase": ["error", {
+        "properties": "never",
+        "ignoreDestructuring": true
+      }],
+      "eqeqeq": ["error", "always"],
+      "no-confusing-arrow": "error",
+      "no-console": "warn",
+      "no-lonely-if": "error",
+      "no-magic-numbers": "warn",
+      "no-mixed-operators": "error",
+      "no-multi-assign": "error",
+      "no-nested-ternary": "error",
+      "no-param-reassign": ["error", {
+        "props": false
+      }],
+      "no-plusplus": "error",
+      "no-var": "error",
+      "prefer-arrow-callback": "error",
+      "prefer-const": "error",
+      "prefer-destructuring": ["error", {
+        "object": true,
+        "array": false
+      }],
+      "prefer-template": "error",
+      "radix": "error",
+      "require-await": "error",
+      "vars-on-top": "error",
+      "yoda": "error",
+
+      "arrow-parens": ["error", "always"]
+    }
   },
   "browserslist": {
     "production": [
@@ -42,6 +90,7 @@
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
+    "eslint-config-prettier": "^8.5.0",
     "husky": "^7.0.4",
     "lint-staged": "^12.3.7",
     "prettier": "2.6.1"
