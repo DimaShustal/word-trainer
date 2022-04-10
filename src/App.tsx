@@ -1,20 +1,23 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Routes, Route } from 'react-router-dom';
+import { TRAINING_PATH, TRAINING_PREVIEW_PATH } from './constants/path';
+
+// TrainingPreviewPage:
+// - shows words and additional information (success rating, translation)
+// - button that selects 20 random words to practice
+// - checkboxes for choosing words to practice
+
+// TrainingPage:
+// - word writing exercise
+// - russian translation exercise
+// - english translation exercise
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Routes>
+      <Route path={TRAINING_PREVIEW_PATH} element={<div>TrainingPreviewPage</div>} />
+      <Route path={TRAINING_PATH} element={<div>TrainingPage</div>} />
+    </Routes>
   );
 }
 
