@@ -36,7 +36,6 @@
         "ignoreDestructuring": true
       }],
       "eqeqeq": ["error", "always"],
-      "no-confusing-arrow": "error",
       "no-console": "warn",
       "no-lonely-if": "error",
       "no-magic-numbers": "warn",
@@ -60,7 +59,11 @@
       "vars-on-top": "error",
       "yoda": "error",
 
-      "arrow-parens": ["error", "always"]
+      "padding-line-between-statements": [
+        "error",
+        { "blankLine": "always", "prev": ["const", "let", "case", "default"], "next": "*" },
+        { "blankLine": "any", "prev": ["const", "let"], "next": ["const", "let"] }
+      ]
     }
   },
   "browserslist": {
