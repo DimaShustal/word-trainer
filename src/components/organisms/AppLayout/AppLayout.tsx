@@ -1,6 +1,6 @@
 import { FC, ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import { ALL_LANGUAGES_PATH, PHRASE_CONSTRUCTOR_PATH } from '../../../constants/path';
+import { ALL_LANGUAGES_PATH, ALL_WORDS_PATH, PHRASE_CONSTRUCTOR_PATH } from '../../../constants/path';
 import { Main, GlobalStyle, Header, Content, HeaderContent } from './AppLayout.style';
 import Button from '../../atoms/Button';
 
@@ -16,6 +16,9 @@ const AppLayout: FC<AppLayoutProps> = ({ children }) => {
           <HeaderContent>
             <Button type="text" size="medium" as={Link} to={ALL_LANGUAGES_PATH}>
               Языки
+            </Button>
+            <Button type="text" size="medium" as={Link} to={ALL_WORDS_PATH}>
+              Слова
             </Button>
             <Button type="text" size="medium" as={Link} to={PHRASE_CONSTRUCTOR_PATH}>
               Конструктор

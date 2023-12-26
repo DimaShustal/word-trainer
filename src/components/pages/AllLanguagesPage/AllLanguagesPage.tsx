@@ -1,25 +1,25 @@
 import { MouseEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import Typography from '../../atoms/Typography';
 import { LANGUAGES } from '../../../constants/languages';
 import { Card, Container } from './AllLanguagesPage.style';
+import { useAppContext } from '../../../contexts/AppContext';
 
 function AllLanguagesPage() {
-  const navigate = useNavigate();
+  const { store } = useAppContext();
 
   const clickHandler = (e: MouseEvent<HTMLElement>) => {
     const { code } = e.currentTarget.dataset;
 
     if (code) {
-      navigate(`/${code}/words`);
+      store.user.setLanguage(code);
     }
   };
 
   return (
-    <Container gap={20}>
+    <Container>
       {LANGUAGES.map(({ code, name, Icon }) => (
-        <Card key={code} role="button" onClick={clickHandler} data-code={code} direction="column" gap={10}>
+        <Card key={code} role="button" onClick={clickHandler} data-code={code} $active={store.user.language === code}>
           <Icon size="large" />
           <Typography>{name}</Typography>
         </Card>

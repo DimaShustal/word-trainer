@@ -35,9 +35,6 @@ function PhraseConstructorPage() {
   };
 
   useEffect(() => {
-    // TODO refactor
-    store.wordList.setLanguage('PL');
-
     if (!store.wordList.isLoaded) store.wordList.fetchWords();
   }, [store.wordList.isLoaded]);
 

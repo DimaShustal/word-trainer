@@ -2,7 +2,7 @@ import { makeAutoObservable } from 'mobx';
 import { IWord } from 'types/Word';
 import AppStore from './AppStore';
 
-export class Word implements IWord {
+class Word implements IWord {
   word;
   translation;
   id;
@@ -26,3 +26,5 @@ export class Word implements IWord {
     // TODO - update word in database
   }
 }
+
+export default Word;

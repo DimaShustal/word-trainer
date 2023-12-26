@@ -22,10 +22,16 @@ import PhraseConstructorPage from 'components/pages/PhraseConstructorPage/Phrase
 import AppLayout from 'components/organisms/AppLayout/AppLayout';
 import AppStore from 'stores/AppStore';
 import AppContext from 'contexts/AppContext';
+import { useEffect } from 'react';
+import { observer } from 'mobx-react-lite';
 
 const store = new AppStore();
 
 function App() {
+  useEffect(() => {
+    if (!store.user.isLoaded) store.user.fetchUser();
+  }, [store.wordList.isLoaded]);
+
   return (
     <AppContext.Provider value={{ store }}>
       <AppLayout>
@@ -45,4 +51,4 @@ function App() {
   );
 }
 
-export default App;
+export default observer(App);
