@@ -1,52 +1,42 @@
 import { makeAutoObservable } from 'mobx';
-
-interface IWord {
-  word: string;
-  translation: string;
-}
-
-class Word {
-  word: string;
-  translation: string;
-  id = Math.round(Math.random() * Math.pow(10, 16));
-  // category: string;
-  // progressPercent: number;
-  // status: string; LEARNED / LEARNING
-
-  constructor({ word, translation }: IWord) {
-    makeAutoObservable(this);
-
-    this.word = word;
-    this.translation = translation;
-  }
-
-  // increaseTimer() {
-  //   this.secondsPassed += 1;
-  // }
-}
+import { IWord } from 'types/Word';
+import { Word } from './Word';
+import AppStore from './AppStore';
 
 class WordList {
-  words: Word[] = [];
+  language: string | undefined = 'EN';
+  words: IWord[] = [];
+  isLoaded: boolean = false;
 
-  constructor(words: Word[]) {
+  constructor(private store: AppStore) {
     makeAutoObservable(this);
-    this.words = words;
   }
 
-  // increaseTimer() {
-  //   this.secondsPassed += 1;
-  // }
+  setWords(data: IWord[]) {
+    this.words = data.map(word => new Word(this.store, word));
+    this.isLoaded = true;
+  }
+
+  setLanguage(language: string) {
+    if (language !== this.language) {
+      this.words = [];
+      this.isLoaded = false;
+    }
+
+    this.language = language;
+  }
+
+  async fetchWords() {
+    try {
+      const res = await fetch(`/data/${this.language}_words.json`).then(res => res.json());
+
+      if (res?.status === 200 && res?.data) {
+        this.setWords(res?.data);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }
 }
 
-const data: IWord[] = [
-  { word: 'violently', translation: 'яростно' },
-  { word: 'suffering from', translation: 'страдать от' },
-  { word: 'passed out', translation: 'потерял сознание' },
-  { word: 'grief', translation: 'горе' },
-  { word: 'unbearable', translation: 'невыносимый' },
-];
-
-const words = data.map(wordData => new Word(wordData));
-const wordList = new WordList(words);
-
-export default wordList;
+export default WordList;

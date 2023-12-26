@@ -1,27 +1,34 @@
-import React from 'react';
-import { Button, Layout } from 'antd';
+import { FC, ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import { ALL_LANGUAGES_PATH } from '../../../constants/path';
-import { Content, GlobalStyle } from './AppLayout.style';
+import { ALL_LANGUAGES_PATH, PHRASE_CONSTRUCTOR_PATH } from '../../../constants/path';
+import { Main, GlobalStyle, Header, Content, HeaderContent } from './AppLayout.style';
+import Button from '../../atoms/Button';
 
-interface Props {
-  children: React.ReactNode;
+interface AppLayoutProps {
+  children: ReactNode;
 }
 
-function AppLayout({ children }: Props) {
+const AppLayout: FC<AppLayoutProps> = ({ children }) => {
   return (
     <>
-      <Layout>
-        <Layout.Header>
-          <Link to={ALL_LANGUAGES_PATH}>
-            <Button>Home</Button>
-          </Link>
-        </Layout.Header>
+      <Header>
+        <Content>
+          <HeaderContent>
+            <Button type="text" size="medium" as={Link} to={ALL_LANGUAGES_PATH}>
+              Языки
+            </Button>
+            <Button type="text" size="medium" as={Link} to={PHRASE_CONSTRUCTOR_PATH}>
+              Конструктор
+            </Button>
+          </HeaderContent>
+        </Content>
+      </Header>
+      <Main>
         <Content>{children}</Content>
-      </Layout>
+      </Main>
       <GlobalStyle />
     </>
   );
-}
+};
 
 export default AppLayout;

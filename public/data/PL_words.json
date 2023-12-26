@@ -1,0 +1,29 @@
+{
+  "status": 200,
+  "data": [
+    {
+      "word": "Jak się masz?",
+      "translation": "Как дела?",
+      "id": 1,
+      "last_use": 1702412328185,
+      "category": 1,
+      "learned": false
+    },
+    {
+      "word": "Ile to kosztuje?",
+      "translation": "Сколько это стоит?",
+      "id": 2,
+      "last_use": 1702412228185,
+      "category": 1,
+      "learned": false
+    },
+    {
+      "word": "Jestem z firmy OTS i zapomniałem karty, czy możesz mi pomóc?",
+      "translation": "Я из компании ОТС и я забыл карту, не могли бы вы помочь мне подняться?",
+      "id": 3,
+      "last_use": 1702412228185,
+      "category": 1,
+      "learned": false
+    }
+  ]
+}

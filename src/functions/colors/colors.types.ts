@@ -1,0 +1,18 @@
+export type TColor =
+  | 'currentColor'
+  | 'primary1'
+  | 'primary2'
+  | 'secondary1'
+  | 'secondary2'
+  | 'secondary3'
+  | 'secondary4'
+  | 'secondary5'
+  | 'tertiary1'
+  | 'tertiary2'
+  | 'tertiary3'
+  | 'tertiary4'
+  | 'tertiary5'
+  | 'tertiary6'
+  | 'tertiary7'
+  | 'transparent'
+  | string;

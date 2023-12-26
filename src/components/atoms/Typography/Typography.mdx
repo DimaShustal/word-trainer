@@ -1,0 +1,71 @@
+import { Canvas, Meta } from '@storybook/addon-docs';
+import Typography from './Typography';
+import Stack from '../Stack';
+
+<Meta title="Typography" component={Typography} />
+
+<Canvas withToolbar>
+  <Stack direction="column" spacing="20" alignItems="flex-start" style={{ maxWidth: 800 }}>
+    <Stack spacing="10" alignItems="center">
+      <Stack style={{ minWidth: 190 }} justifyContent="flex-start">
+        <Typography variant="h1">H1</Typography>
+      </Stack>
+      <Typography variant="h1">Your text here</Typography>
+    </Stack>
+    <Stack spacing="10" alignItems="center">
+      <Stack style={{ minWidth: 190 }} justifyContent="flex-start">
+        <Typography variant="h2">H2</Typography>
+      </Stack>
+      <Typography variant="h2">Your text here</Typography>
+    </Stack>
+    <Stack spacing="10" alignItems="center">
+      <Stack style={{ minWidth: 190 }} justifyContent="flex-start">
+        <Typography variant="h3">H3</Typography>
+      </Stack>
+      <Typography variant="h3">Your text here</Typography>
+    </Stack>
+    <Stack spacing="10" alignItems="center">
+      <Stack style={{ minWidth: 190 }} justifyContent="flex-start">
+        <Typography variant="h4">H4</Typography>
+      </Stack>
+      <Typography variant="h4">Your text here</Typography>
+    </Stack>
+    <Stack spacing="10" alignItems="center">
+      <Stack style={{ minWidth: 190 }} justifyContent="flex-start">
+        <Typography variant="h5">H5</Typography>
+      </Stack>
+      <Typography variant="h5">Your text here</Typography>
+    </Stack>
+    <Stack spacing="10" alignItems="center">
+      <Stack style={{ minWidth: 190 }} justifyContent="flex-start">
+        <Typography variant="h6">H6</Typography>
+      </Stack>
+      <Typography variant="h6">Your text here</Typography>
+    </Stack>
+    <Stack spacing="10" alignItems="center">
+      <Stack style={{ minWidth: 190 }} justifyContent="flex-start">
+        <Typography variant="paragraphLarge">Paragraph Large</Typography>
+      </Stack>
+      <Typography variant="paragraphLarge">
+        Your text here of the normal paragraph large length. Also it goes to another line sometimes.
+      </Typography>
+    </Stack>
+    <Stack spacing="10" alignItems="center">
+      <Stack style={{ minWidth: 190 }} justifyContent="flex-start">
+        <Typography variant="paragraphMedium">Paragraph Medium</Typography>
+      </Stack>
+      <Typography variant="paragraphMedium">
+        Your text here of the normal paragraph medium length. Also it goes to another line
+        sometimes.
+      </Typography>
+    </Stack>
+    <Stack spacing="10" alignItems="center">
+      <Stack style={{ minWidth: 190 }} justifyContent="flex-start">
+        <Typography variant="paragraphSmall">Paragraph Small</Typography>
+      </Stack>
+      <Typography variant="paragraphSmall">
+        Your text here of the normal paragraph small length. Also it goes to another line sometimes.
+      </Typography>
+    </Stack>
+  </Stack>
+</Canvas>

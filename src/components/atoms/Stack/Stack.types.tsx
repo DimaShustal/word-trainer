@@ -1,10 +1,10 @@
 import React, { CSSProperties } from 'react';
 
-export type AsComponent<T = any> = React.ComponentType<T> | string;
+type AsComponent<T = any> = React.ComponentType<T> | string;
 
 export interface StackBaseProps {
   direction?: CSSProperties['flexDirection'];
-  gap?: CSSProperties['gap'];
+  gap?: number;
   alignItems?: CSSProperties['alignItems'];
   justifyContent?: CSSProperties['justifyContent'];
   fullWidth?: boolean;

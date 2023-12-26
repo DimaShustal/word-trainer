@@ -1,8 +1,8 @@
-import React from 'react';
+import { forwardRef } from 'react';
 import { StackProps } from './Stack.types';
 import { StackContainer } from './Stack.styles';
 
-const Stack = React.forwardRef<HTMLDivElement, StackProps>(
+const Stack = forwardRef<HTMLDivElement, StackProps>(
   (
     {
       children,
