@@ -24,6 +24,7 @@ import AppStore from 'stores/AppStore';
 import AppContext from 'contexts/AppContext';
 import { useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
+import Loader from './components/atoms/Loader/Loader';
 
 const store = new AppStore();
 
@@ -31,6 +32,10 @@ function App() {
   useEffect(() => {
     if (!store.user.isLoaded) store.user.fetchUser();
   }, [store.wordList.isLoaded]);
+
+  if (!store.user.isLoaded) {
+    return <Loader />;
+  }
 
   return (
     <AppContext.Provider value={{ store }}>

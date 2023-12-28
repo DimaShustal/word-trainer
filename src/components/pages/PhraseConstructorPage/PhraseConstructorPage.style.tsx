@@ -3,6 +3,10 @@ import Stack from '../../atoms/Stack';
 import { getColor } from '../../../functions/colors';
 import { pixelsToRems } from '../../../functions/pixelsToRems';
 
+interface IAnswerItemProps {
+  $hasError: boolean;
+}
+
 export const Container = styled(Stack).attrs({
   justifyContent: 'space-between',
   direction: 'column',
@@ -27,13 +31,15 @@ export const AnswerContainer = styled(Stack).attrs({
   }
 `;
 
-export const AnswerItem = styled.button`
+export const AnswerItem = styled.button<IAnswerItemProps>`
   all: unset;
   cursor: pointer;
   padding: 0 ${pixelsToRems(10)};
   border-radius: 3px;
   height: ${pixelsToRems(30)};
   border: 1px solid ${getColor('secondary1')};
+
+  ${({ $hasError }) => $hasError && `border-color: ${getColor('tertiary4')};`}
 `;
 
 export const WordsContainer = styled(Stack).attrs({

@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx';
-import { IWord } from 'types/Word';
+import { ICheckedPhrasePart, IPhrasePart, IWord, IWordData } from 'types/Word';
 import AppStore from './AppStore';
 
 class Word implements IWord {
@@ -9,20 +9,42 @@ class Word implements IWord {
   last_use;
   category;
   learned;
+  isPhrase;
 
-  constructor(private store: AppStore, word: IWord) {
+  constructor(private store: AppStore, word: IWordData) {
     makeAutoObservable(this);
 
-    this.word = word.word;
-    this.translation = word.translation;
+    this.word = word.word.trim();
+    this.translation = word.translation.trim();
     this.id = word.id;
     this.last_use = word.last_use;
     this.category = word.category;
     this.learned = word.learned;
+
+    this.isPhrase = this.word.split(' ').length > 1;
   }
 
-  toggleLearned() {
-    this.learned = !this.learned;
+  get phraseParts() {
+    if (!this.isPhrase) {
+      return null;
+    }
+
+    return this.word
+      .toLowerCase()
+      .replace(/[.,?!]+/gi, '')
+      .replace(/\s+/gi, ' ')
+      .split(' ')
+      .map((text, id) => ({ text, id }));
+  }
+
+  checkPhraseParts(phraseParts: IPhrasePart[]) {
+    return phraseParts.reduce((result: ICheckedPhrasePart[], phrasePart: IPhrasePart, id) => {
+      return [...result, { ...phrasePart, hasError: phrasePart.text !== this.phraseParts?.[id].text }];
+    }, []);
+  }
+
+  updateLastUse() {
+    this.last_use = Date.now();
     // TODO - update word in database
   }
 }

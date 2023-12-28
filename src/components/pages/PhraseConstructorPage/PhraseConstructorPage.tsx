@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { AnswerContainer, AnswerItem, Container, WordsContainer } from './PhraseConstructorPage.style';
 import { useAppContext } from '../../../contexts/AppContext';
-import { useEffect, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import Loader from '../../atoms/Loader/Loader';
 import Typography from '../../atoms/Typography';
 import Stack from '../../atoms/Stack';
@@ -9,29 +9,105 @@ import Button from '../../atoms/Button';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import DraggableItem from '../../atoms/DraggableItem/DraggableItem';
+import { ICheckedPhrasePart, IPhrasePart, IWord } from '../../../types/Word';
+import { Navigate } from 'react-router-dom';
+import { ALL_WORDS_PATH } from '../../../constants/path';
 
-function PhraseConstructorPage() {
+interface IPhraseConstructorProps {
+  refresh: () => void;
+}
+
+const randomizePhraseParts = (phraseParts: IPhrasePart[]) => () =>
+  [...phraseParts].sort((a, b) => {
+    if (a.id === 1) return -1;
+    if (b.id === 1) return 1;
+    return Math.random() - 0.5;
+  });
+
+const PhraseConstructor: FC<IPhraseConstructorProps> = observer(({ refresh }) => {
   const { store } = useAppContext();
-  const [answers, setAnswers] = useState([
-    { text: 'jestem', id: 1 },
-    { text: 'z', id: 2 },
-    { text: 'firmy', id: 3 },
-    { text: 'ots', id: 4 },
-    { text: 'i', id: 5 },
-    { text: 'zapomniałem', id: 6 },
-    { text: 'karty', id: 7 },
-    { text: 'czy', id: 8 },
-    { text: 'możesz', id: 9 },
-    { text: 'mi', id: 10 },
-    { text: 'pomóc', id: 11 },
-  ]);
+  const phrase = useRef<IWord>(store.wordList.getRandomPhrase());
+  const [phraseParts, setPhraseParts] = useState<IPhrasePart[]>(
+    randomizePhraseParts(phrase.current?.phraseParts || []),
+  );
+  const [answers, setAnswers] = useState<ICheckedPhrasePart[]>([]);
 
-  const moveCard = (fromIndex: number, toIndex: number) => {
+  const moveAnswer = (fromIndex: number, toIndex: number) => {
     const updatedAnswers = [...answers];
     const [movedAnswer] = updatedAnswers.splice(fromIndex, 1);
 
     updatedAnswers.splice(toIndex, 0, movedAnswer);
     setAnswers(updatedAnswers);
+  };
+
+  const selectAnswer = (answer: IPhrasePart) => {
+    const newPhraseParts = phraseParts.filter(phrasePart => phrasePart.id !== answer.id);
+    const newAnswers = [...answers, { ...answer, hasError: false }];
+
+    setPhraseParts(newPhraseParts);
+    setAnswers(newAnswers);
+  };
+
+  const checkAnswers = () => {
+    const checkedPhrasePart = phrase.current?.checkPhraseParts(answers) || [];
+
+    if (checkedPhrasePart.some(({ hasError }) => hasError)) {
+      setAnswers(checkedPhrasePart);
+      return;
+    }
+
+    phrase.current?.updateLastUse();
+    refresh();
+  };
+
+  if (!phrase.current) {
+    return <Navigate to={ALL_WORDS_PATH} replace={true} />;
+  }
+
+  return (
+    <Container>
+      <Stack direction="column" gap={40} fullWidth>
+        <Typography variant="h5" align="center">
+          {phrase.current.translation}
+        </Typography>
+
+        <DndProvider backend={HTML5Backend}>
+          <AnswerContainer>
+            {answers.map((answer, index) => (
+              <DraggableItem key={answer.id} id={answer.id} index={index} moveCard={moveAnswer}>
+                <AnswerItem $hasError={answer.hasError}>{answer.text}</AnswerItem>
+              </DraggableItem>
+            ))}
+          </AnswerContainer>
+        </DndProvider>
+
+        <WordsContainer>
+          {phraseParts.map(answer => (
+            <Button key={answer.id} type="secondary" size="small" onClick={() => selectAnswer(answer)}>
+              {answer.text}
+            </Button>
+          ))}
+        </WordsContainer>
+      </Stack>
+
+      <Stack gap={20}>
+        <Button type="primary" size="medium" disabled={!!phraseParts.length} onClick={checkAnswers}>
+          Проверить
+        </Button>
+        <Button type="text" size="medium" onClick={() => refresh()}>
+          Не знаю
+        </Button>
+      </Stack>
+    </Container>
+  );
+});
+
+const PhraseConstructorPage = observer(() => {
+  const { store } = useAppContext();
+  const [key, setKey] = useState<number>(0);
+
+  const refresh = () => {
+    setKey(key + 1);
   };
 
   useEffect(() => {
@@ -42,51 +118,11 @@ function PhraseConstructorPage() {
     return <Loader />;
   }
 
-  const { translation, word } = store.wordList.words[2];
+  if (!store.wordList.phrases?.length) {
+    return <Navigate to={ALL_WORDS_PATH} replace={true} />;
+  }
 
-  const words = word
-    .toLowerCase()
-    .trim()
-    .replace(/[.,?!]+/gi, '')
-    .replace(/\s+/gi, ' ')
-    .split(' ');
+  return <PhraseConstructor key={key} refresh={refresh} />;
+});
 
-  return (
-    <Container>
-      <Stack direction="column" gap={40} fullWidth>
-        <Typography variant="h5" align="center">
-          {translation}
-        </Typography>
-
-        <DndProvider backend={HTML5Backend}>
-          <AnswerContainer>
-            {answers.map((answer, index) => (
-              <DraggableItem key={answer.id} id={answer.id} index={index} moveCard={moveCard}>
-                <AnswerItem>{answer.text}</AnswerItem>
-              </DraggableItem>
-            ))}
-          </AnswerContainer>
-        </DndProvider>
-
-        <WordsContainer>
-          {words.map((substring, id) => (
-            <Button key={id} type="secondary" size="small" onClick={() => null}>
-              {substring}
-            </Button>
-          ))}
-        </WordsContainer>
-      </Stack>
-
-      <Stack gap={20}>
-        <Button type="primary" size="medium" onClick={() => null}>
-          Проверить
-        </Button>
-        <Button type="text" size="medium" onClick={() => null}>
-          Не знаю
-        </Button>
-      </Stack>
-    </Container>
-  );
-}
-
-export default observer(PhraseConstructorPage);
+export default PhraseConstructorPage;
