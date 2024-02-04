@@ -20,15 +20,14 @@ import PhraseConstructorPage from 'components/pages/PhraseConstructorPage/Phrase
 // import TrainingBlitzPage from 'components/pages/TrainingBlitzPage/TrainingBlitzPage';
 // import TrainingResultPage from 'components/pages/TrainingResultPage/TrainingResultPage';
 import AppLayout from 'components/organisms/AppLayout/AppLayout';
-import AppStore from 'stores/AppStore';
-import AppContext from 'contexts/AppContext';
 import { useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import Loader from './components/atoms/Loader/Loader';
-
-const store = new AppStore();
+import { useAppContext } from './contexts/AppContext';
 
 function App() {
+  const { store } = useAppContext();
+
   useEffect(() => {
     if (!store.user.isLoaded) store.user.fetchUser();
   }, [store.wordList.isLoaded]);
@@ -38,21 +37,19 @@ function App() {
   }
 
   return (
-    <AppContext.Provider value={{ store }}>
-      <AppLayout>
-        <Routes>
-          <Route path={ALL_LANGUAGES_PATH} element={<AllLanguagesPage />} />
-          <Route path={ALL_WORDS_PATH} element={<AllWordsPage />} />
-          <Route path={PHRASE_CONSTRUCTOR_PATH} element={<PhraseConstructorPage />} />
-          {/*<Route path={ALL_TRAININGS_PATH} element={<AllTrainingsPage />} />*/}
-          {/*<Route path={ADD_WORDS_PATH} element={<AddWordPage />} />*/}
-          {/*<Route path={TRAINING_TRANSLATION_PATH} element={<TrainingTranslationPage />} />*/}
-          {/*<Route path={TRAINING_WRITING_PATH} element={<TrainingWritingPage />} />*/}
-          {/*<Route path={TRAINING_BLITZ_PATH} element={<TrainingBlitzPage />} />*/}
-          {/*<Route path={TRAINING_RESULT_PATH} element={<TrainingResultPage />} />*/}
-        </Routes>
-      </AppLayout>
-    </AppContext.Provider>
+    <AppLayout>
+      <Routes>
+        <Route path={ALL_LANGUAGES_PATH} element={<AllLanguagesPage />} />
+        <Route path={ALL_WORDS_PATH} element={<AllWordsPage />} />
+        <Route path={PHRASE_CONSTRUCTOR_PATH} element={<PhraseConstructorPage />} />
+        {/*<Route path={ALL_TRAININGS_PATH} element={<AllTrainingsPage />} />*/}
+        {/*<Route path={ADD_WORDS_PATH} element={<AddWordPage />} />*/}
+        {/*<Route path={TRAINING_TRANSLATION_PATH} element={<TrainingTranslationPage />} />*/}
+        {/*<Route path={TRAINING_WRITING_PATH} element={<TrainingWritingPage />} />*/}
+        {/*<Route path={TRAINING_BLITZ_PATH} element={<TrainingBlitzPage />} />*/}
+        {/*<Route path={TRAINING_RESULT_PATH} element={<TrainingResultPage />} />*/}
+      </Routes>
+    </AppLayout>
   );
 }
 
