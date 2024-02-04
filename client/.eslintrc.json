@@ -1,0 +1,67 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": ["eslint:recommended", "react-app", "react-app/jest", "prettier", "plugin:storybook/recommended"],
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "rules": {
+    "no-duplicate-imports": "error",
+    "no-use-before-define": "error",
+    "camelcase": [
+      "error",
+      {
+        "properties": "never",
+        "ignoreDestructuring": true
+      }
+    ],
+    "eqeqeq": ["error", "always"],
+    "no-console": "warn",
+    "no-lonely-if": "error",
+    "no-magic-numbers": "warn",
+    "no-mixed-operators": "error",
+    "no-multi-assign": "error",
+    "no-nested-ternary": "error",
+    "no-param-reassign": [
+      "error",
+      {
+        "props": false
+      }
+    ],
+    "no-plusplus": "error",
+    "no-var": "error",
+    "prefer-arrow-callback": "error",
+    "prefer-const": "error",
+    "prefer-destructuring": [
+      "error",
+      {
+        "object": true,
+        "array": false
+      }
+    ],
+    "prefer-template": "error",
+    "radix": "error",
+    "require-await": "error",
+    "vars-on-top": "error",
+    "yoda": "error",
+    "padding-line-between-statements": [
+      "error",
+      {
+        "blankLine": "always",
+        "prev": ["const", "let", "case", "default"],
+        "next": "*"
+      },
+      {
+        "blankLine": "any",
+        "prev": ["const", "let"],
+        "next": ["const", "let"]
+      }
+    ]
+  }
+}
