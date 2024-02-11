@@ -1,15 +1,22 @@
-import open from 'open';
+import 'dotenv/config';
 import express from 'express';
+import cors from 'cors';
+import { createHandler } from 'graphql-http/lib/use/express';
+import { schema, root } from './schema.js';
 
+const PORT = 4000;
 const app = express();
-const port = 3010;
 
-app.get('/', (req, res) => {
-  res.send('Hello World!!');
-});
+app.use(cors());
+app.all(
+  '/graphql',
+  createHandler({
+    schema,
+    rootValue: root,
+    context: req => {
+      return { req };
+    },
+  }),
+);
 
-app.listen(port, () => {
-  console.log('Example app listening on port 3010!!');
-
-  open(`http://localhost:${port}`);
-});
+app.listen(PORT, () => console.log(`Listening to port ${PORT}`));
