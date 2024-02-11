@@ -3,6 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import { createHandler } from 'graphql-http/lib/use/express';
 import { schema, root } from './schema.js';
+import { parseAuthorizationHeader } from './app/authorization.js';
 
 const PORT = 4000;
 const app = express();
@@ -14,7 +15,9 @@ app.all(
     schema,
     rootValue: root,
     context: req => {
-      return { req };
+      const user = parseAuthorizationHeader(req);
+
+      return { user };
     },
   }),
 );
