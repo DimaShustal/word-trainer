@@ -22,4 +22,12 @@ app.all(
   }),
 );
 
+app.get('/healthcheck', (_, res) => {
+  res.send('OK');
+});
+
+app.use((req, res) => {
+  res.status(404).send('Not Found');
+});
+
 app.listen(PORT, () => console.log(`Listening to port ${PORT}`));
