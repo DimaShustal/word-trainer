@@ -1,3 +1,8 @@
+import { IUser, IUserLanguage, IUserWord } from './user';
+import { ILanguageWord, ILanguage } from './language';
+
+export { IUser, IUserLanguage, IUserWord, ILanguageWord, ILanguage };
+
 export interface IJwtData {
   name: string;
   userId: string;
@@ -5,13 +10,7 @@ export interface IJwtData {
 
 interface IDb {
   users: IUser[];
-}
-
-export interface IUser {
-  id: string;
-  name: string;
-  passwordHash: string;
-  salt: string;
+  languages: ILanguage[];
 }
 
 export interface IContext {
