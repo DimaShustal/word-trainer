@@ -214,19 +214,23 @@ export const root = {
 };
 
 export const schema = buildSchema(`
-  type Language {
+  interface Node {
+    id: ID!
+  }
+
+  type Language implements Node {
     id: ID!
     name: String!
     code: String!
   }
 
-  type User {
+  type User implements Node {
     id: ID!
     name: String!
     languages: [Language]!
   }
   
-  type UserWord {
+  type UserWord implements Node {
     id: ID!
     word: String!
     translation: String!
