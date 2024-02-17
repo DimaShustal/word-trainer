@@ -13,5 +13,5 @@ export interface IUserLanguage {
 
 export interface IUserWord {
   id: string;
-  lastUse: number;
+  lastUse?: number;
 }

@@ -1,5 +1,6 @@
 import { buildSchema } from 'graphql';
 import bcrypt from 'bcrypt';
+import { v4 as uuidv4 } from 'uuid';
 import { generateToken } from './app/authorization.js';
 import { IContext, ILanguage, ILanguageWord, IUser, IUserLanguage, IUserWord } from './types/index.js';
 
@@ -12,10 +13,10 @@ interface IUserResponse extends Omit<IUser, 'languages'> {
   languages: ILanguage[];
 }
 
-interface IUserWordsEdges extends Omit<IUserWord, 'id'>, ILanguageWord {}
+interface IUserWordEdge extends Omit<IUserWord, 'id'>, ILanguageWord {}
 
 interface IUserWordsResponse {
-  edges: IUserWordsEdges[];
+  edges: IUserWordEdge[];
   pageInfo: {
     totalCount: number;
     hasNextPage: boolean;
@@ -106,6 +107,110 @@ export const root = {
       },
     };
   },
+  addWords: async ({ languageId, words }: { languageId: string; words: string[] }, context: IContext) => {
+    if (!context?.user?.userId) {
+      throw new Error('User not found');
+    }
+
+    const user = context.db.users.find((user: IUser) => user.id === context?.user?.userId);
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    const language = context.db.languages.find((language: ILanguage) => language.id === languageId);
+
+    if (!language) {
+      throw new Error('Language not found');
+    }
+
+    let userLanguage = user.languages.find((language: IUserLanguage) => language.id === languageId);
+
+    if (!userLanguage) {
+      userLanguage = { id: languageId, words: [] };
+      user.languages.push(userLanguage);
+    }
+
+    const { userWords, languageWords } = words.reduce(
+      (
+        result: {
+          userWords: IUserWord[];
+          languageWords: ILanguageWord[];
+        },
+        word: string,
+      ) => {
+        // TODO: Implement word normalization
+        const normalizedWord = word.toLowerCase();
+        const languageWord = language.words.find((languageWord: ILanguageWord) => languageWord.word === normalizedWord);
+        const id = languageWord?.id || uuidv4();
+        // TODO implement translation
+        const languageWords = languageWord
+          ? result.languageWords
+          : [...result.languageWords, { id, word: normalizedWord, translation: 'Some text that should be changed' }];
+        const userWords =
+          languageWord && userLanguage.words.find((userWord: IUserWord) => userWord.id === id)
+            ? result.userWords
+            : [...result.userWords, { id, lastUse: 0 }];
+
+        return { userWords, languageWords };
+      },
+      { userWords: [], languageWords: [] },
+    );
+
+    userLanguage.words = [...userLanguage.words, ...userWords];
+    language.words = [...language.words, ...languageWords];
+
+    return true;
+  },
+  updateWords: async ({ languageId, words }: { languageId: string; words: IUserWord[] }, context: IContext) => {
+    if (!context?.user?.userId) {
+      throw new Error('User not found');
+    }
+
+    const user = context.db.users.find((user: IUser) => user.id === context?.user?.userId);
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    const language = context.db.languages.find((language: ILanguage) => language.id === languageId);
+
+    if (!language) {
+      throw new Error('Language not found');
+    }
+
+    let userLanguage = user.languages.find((language: IUserLanguage) => language.id === languageId);
+
+    if (!userLanguage) {
+      userLanguage = { id: languageId, words: [] };
+    }
+
+    words.forEach((word: IUserWordEdge) => {
+      userLanguage.words = userLanguage.words.filter((userWord: IUserWord) => userWord.id !== word.id);
+      userLanguage.words.push(word);
+    });
+
+    return true;
+  },
+  removeWords: async ({ languageId, wordIds }: { languageId: string; wordIds: string[] }, context: IContext) => {
+    if (!context?.user?.userId) {
+      throw new Error('User not found');
+    }
+
+    const user = context.db.users.find((user: IUser) => user.id === context?.user?.userId);
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    const userLanguage = user.languages.find((language: IUserLanguage) => language.id === languageId);
+
+    if (userLanguage) {
+      userLanguage.words = userLanguage.words.filter(({ id }: IUserWord) => !wordIds.includes(id));
+    }
+
+    return true;
+  },
 };
 
 export const schema = buildSchema(`
@@ -125,7 +230,7 @@ export const schema = buildSchema(`
     id: ID!
     word: String!
     translation: String!
-    lastUse: Float!
+    lastUse: Float
   }
   
   type PageInfo {
@@ -138,6 +243,11 @@ export const schema = buildSchema(`
     pageInfo: PageInfo!
   }
   
+  input UserWordInput {
+    id: ID!
+    lastUse: Float!
+  }
+  
   type Query {
     user: User
     languages: [Language]!
@@ -147,5 +257,8 @@ export const schema = buildSchema(`
   type Mutation {
     createUser(name: String!, password: String!): String
     login(name: String!, password: String!): String
+    addWords(languageId: ID!, words: [String]!): Boolean
+    updateWords(languageId: ID!, words: [UserWordInput]!): Boolean
+    removeWords(languageId: ID!, wordIds: [ID]!): Boolean
   }
 `);
