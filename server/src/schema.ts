@@ -3,6 +3,8 @@ import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 import { generateToken } from './app/authorization.js';
 import { IContext, ILanguage, ILanguageWord, IUser, IUserLanguage, IUserWord } from './types/index.js';
+import translateText from './app/translateText.js';
+import getNormalizedWord from './app/getNormalizedWord.js';
 
 interface IUserCredentials {
   name: string;
@@ -107,7 +109,10 @@ export const root = {
       },
     };
   },
-  addWords: async ({ languageId, words }: { languageId: string; words: string[] }, context: IContext) => {
+  addWordsFromTranslation: async (
+    { languageId, translations }: { languageId: string; translations: string[] },
+    context: IContext,
+  ) => {
     if (!context?.user?.userId) {
       throw new Error('User not found');
     }
@@ -131,34 +136,47 @@ export const root = {
       user.languages.push(userLanguage);
     }
 
-    const { userWords, languageWords } = words.reduce(
-      (
-        result: {
-          userWords: IUserWord[];
-          languageWords: ILanguageWord[];
-        },
-        word: string,
-      ) => {
-        // TODO: Implement word normalization
-        const normalizedWord = word.toLowerCase();
-        const languageWord = language.words.find((languageWord: ILanguageWord) => languageWord.word === normalizedWord);
-        const id = languageWord?.id || uuidv4();
-        // TODO implement translation
-        const languageWords = languageWord
-          ? result.languageWords
-          : [...result.languageWords, { id, word: normalizedWord, translation: 'Some text that should be changed' }];
-        const userWords =
-          languageWord && userLanguage.words.find((userWord: IUserWord) => userWord.id === id)
-            ? result.userWords
-            : [...result.userWords, { id, lastUse: 0 }];
+    const { translationsToCreate, languageWords } = translations.reduce(
+      (result: { translationsToCreate: string[]; languageWords: string[] }, translation: string) => {
+        const normalizedTranslation = getNormalizedWord(translation, language.translationCode);
 
-        return { userWords, languageWords };
+        if (!normalizedTranslation) return result;
+
+        const languageWord = language.words.find(
+          (languageWord: ILanguageWord) => languageWord.translation === normalizedTranslation,
+        );
+
+        if (languageWord) {
+          return {
+            ...result,
+            languageWords: [...result.languageWords, languageWord],
+          };
+        }
+
+        return {
+          ...result,
+          translationsToCreate: [...result.translationsToCreate, normalizedTranslation],
+        };
       },
-      { userWords: [], languageWords: [] },
+      { translationsToCreate: [], languageWords: [] },
     );
 
+    const translatedWords = await translateText(translationsToCreate, language.translationCode, language.code);
+
+    const languageWordsNew = translatedWords.map((word: string, id: number) => {
+      return { id: uuidv4(), word, translation: translationsToCreate[id] };
+    });
+
+    const userWords = [...languageWords, ...languageWordsNew]
+      .filter((languageWord: ILanguageWord) => {
+        return !userLanguage.words.find((userWord: IUserWord) => userWord.id === languageWord.id);
+      })
+      .map((languageWord: ILanguageWord) => {
+        return { id: languageWord.id, lastUse: 0 };
+      });
+
     userLanguage.words = [...userLanguage.words, ...userWords];
-    language.words = [...language.words, ...languageWords];
+    language.words = [...language.words, ...languageWordsNew];
 
     return true;
   },
@@ -222,6 +240,7 @@ export const schema = buildSchema(`
     id: ID!
     name: String!
     code: String!
+    translationCode: String!
   }
 
   type User implements Node {
@@ -261,7 +280,7 @@ export const schema = buildSchema(`
   type Mutation {
     createUser(name: String!, password: String!): String
     login(name: String!, password: String!): String
-    addWords(languageId: ID!, words: [String]!): Boolean
+    addWordsFromTranslation(languageId: ID!, translations: [String]!): Boolean
     updateWords(languageId: ID!, words: [UserWordInput]!): Boolean
     removeWords(languageId: ID!, wordIds: [ID]!): Boolean
   }

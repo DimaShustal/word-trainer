@@ -38,6 +38,7 @@ const languagesDb: ILanguage[] = [
     id: '1',
     name: 'English',
     code: 'en',
+    translationCode: 'ru',
     words: [
       { word: 'violently', translation: 'яростно', id: '1' },
       { word: 'suffering from', translation: 'страдать от', id: '2' },
@@ -50,6 +51,7 @@ const languagesDb: ILanguage[] = [
     id: '2',
     name: 'Polish',
     code: 'pl',
+    translationCode: 'ru',
     words: [
       { word: 'Jak się masz?', translation: 'Как дела?', id: '1' },
       { word: 'Ile to kosztuje?', translation: 'Сколько это стоит?', id: '2' },
