@@ -2,9 +2,10 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import { createHandler } from 'graphql-http/lib/use/express';
-import { schema, root } from './schema.js';
-import { parseAuthorizationHeader } from './app/authorization.js';
+import { parseAuthorizationHeader } from './app/functions/authorization.js';
 import db from './db/index.js';
+import schema from './app/graphql/schema.js';
+import rootValue from './app/graphql/rootValue/index.js';
 
 const PORT = 4000;
 const app = express();
@@ -14,7 +15,7 @@ app.all(
   '/graphql',
   createHandler({
     schema,
-    rootValue: root,
+    rootValue,
     context: req => {
       const user = parseAuthorizationHeader(req);
 
