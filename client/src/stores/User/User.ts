@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
-import AppStore from './AppStore';
-import { SUPPORTED_LANGUAGES } from '../constants/languages';
+import AppStore from '../AppStore';
+import { SUPPORTED_LANGUAGES } from '../../constants/languages';
 
 class User {
   language: string | undefined;

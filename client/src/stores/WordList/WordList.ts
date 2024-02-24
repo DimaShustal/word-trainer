@@ -1,8 +1,8 @@
 import { get, makeAutoObservable, reaction } from 'mobx';
 import { IWord, IWordData } from 'types/Word';
-import Word from './Word';
-import AppStore from './AppStore';
-import random from '../functions/random';
+import Word from '../Word/Word';
+import AppStore from '../AppStore';
+import random from '../../functions/random';
 
 class WordList {
   words: IWord[] = [];

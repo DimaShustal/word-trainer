@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 import { ICheckedPhrasePart, IPhrasePart, IWord, IWordData } from 'types/Word';
-import AppStore from './AppStore';
+import AppStore from '../AppStore';
 
 class Word implements IWord {
   word;
