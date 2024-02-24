@@ -4,6 +4,32 @@ Assistant in learning new words in a foreign language.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Development
+
+1. Run the server locally
+
+```bash
+cd ../server && yarn start
+```
+
+2. Install the client dependencies
+
+```bash
+yarn install
+```
+
+3. Generate graphql types for the client
+
+```bash
+yarn codegen
+```
+
+4. Run the client locally
+
+```bash
+yarn start
+```
+
 ## Atomic Methodology
 
 - Atoms - are **_HTML tags_** such as a form, an input field, or a button.
