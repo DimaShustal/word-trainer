@@ -24,6 +24,12 @@ import { useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import Loader from './components/atoms/Loader/Loader';
 import { useAppContext } from './contexts/AppContext';
+import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev';
+
+if (process.env.NODE_ENV !== 'production') {
+  loadDevMessages();
+  loadErrorMessages();
+}
 
 function App() {
   const { store } = useAppContext();
