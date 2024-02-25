@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite';
-import { Link } from 'react-router-dom';
+import { Link, matchPath, useLocation } from 'react-router-dom';
 import { ALL_LANGUAGES_PATH, ALL_WORDS_PATH, PHRASE_CONSTRUCTOR_PATH, ROOT_PATH } from '../../../constants/path';
 import { HeaderContainer, HeaderContent } from './Header.style';
 import Button from '../../atoms/Button';
@@ -9,6 +9,7 @@ import Content from '../../atoms/Content/Content';
 
 function Header() {
   const { store } = useAppContext();
+  const { pathname } = useLocation();
 
   const loginHandler = () => {
     // TODO implement login
@@ -19,7 +20,7 @@ function Header() {
       <HeaderContainer>
         <Content>
           <HeaderContent>
-            <Button type="text" size="medium" as={Link} to={ROOT_PATH}>
+            <Button type="text" size="medium" as={Link} to={ROOT_PATH} active={!!matchPath(pathname, ROOT_PATH)}>
               Главная
             </Button>
             <Button type="text" size="medium" onClick={loginHandler}>
@@ -35,17 +36,35 @@ function Header() {
     <HeaderContainer>
       <Content>
         <HeaderContent>
-          <Button type="text" size="medium" as={Link} to={ROOT_PATH}>
+          <Button type="text" size="medium" as={Link} to={ROOT_PATH} active={!!matchPath(pathname, ROOT_PATH)}>
             Главная
           </Button>
           <Stack gap={20}>
-            <Button type="text" size="medium" as={Link} to={ALL_LANGUAGES_PATH}>
+            <Button
+              type="text"
+              size="medium"
+              as={Link}
+              to={ALL_LANGUAGES_PATH}
+              active={!!matchPath(pathname, ALL_LANGUAGES_PATH)}
+            >
               Языки
             </Button>
-            <Button type="text" size="medium" as={Link} to={ALL_WORDS_PATH}>
+            <Button
+              type="text"
+              size="medium"
+              as={Link}
+              to={ALL_WORDS_PATH}
+              active={!!matchPath(pathname, ALL_WORDS_PATH)}
+            >
               Слова
             </Button>
-            <Button type="text" size="medium" as={Link} to={PHRASE_CONSTRUCTOR_PATH}>
+            <Button
+              type="text"
+              size="medium"
+              as={Link}
+              to={PHRASE_CONSTRUCTOR_PATH}
+              active={!!matchPath(pathname, PHRASE_CONSTRUCTOR_PATH)}
+            >
               Конструктор
             </Button>
           </Stack>
