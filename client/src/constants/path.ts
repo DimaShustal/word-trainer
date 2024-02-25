@@ -1,3 +1,4 @@
+export const ROOT_PATH = '/root';
 export const ALL_LANGUAGES_PATH = '/';
 export const ALL_WORDS_PATH = '/words';
 export const PHRASE_CONSTRUCTOR_PATH = '/phrase-constructor';

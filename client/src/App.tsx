@@ -25,6 +25,7 @@ import { observer } from 'mobx-react-lite';
 import Loader from './components/atoms/Loader/Loader';
 import { useAppContext } from './contexts/AppContext';
 import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev';
+import useLogoutListener from './functions/useLogoutListener';
 
 if (process.env.NODE_ENV !== 'production') {
   loadDevMessages();
@@ -37,6 +38,8 @@ function App() {
   useEffect(() => {
     if (!store.user.isLoaded) store.user.fetchUser();
   }, [store.wordList.isLoaded]);
+
+  useLogoutListener(store);
 
   if (!store.user.isLoaded) {
     return <Loader />;
