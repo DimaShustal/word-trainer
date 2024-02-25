@@ -8,9 +8,12 @@ import { ROOT_PATH } from '../../constants/path';
 class User {
   language: string | undefined;
   isLoaded: boolean = false;
+  isLogged: boolean | undefined;
 
   constructor(private store: AppStore) {
     makeAutoObservable(this);
+
+    this.isLogged = !!localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN);
   }
 
   setLanguage(language: string) {

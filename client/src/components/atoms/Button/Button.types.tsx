@@ -101,7 +101,7 @@ export type ButtonRootProps = {
   /**
    * styled-component `as` prop
    */
-  as?: React.ElementType;
+  as?: React.ElementType | any;
 
   /**
    * react-router-dom `to` prop

@@ -3,6 +3,7 @@ import {
   ALL_LANGUAGES_PATH,
   ALL_WORDS_PATH,
   PHRASE_CONSTRUCTOR_PATH,
+  ROOT_PATH,
   // ALL_TRAININGS_PATH,
   // ADD_WORDS_PATH,
   // TRAINING_TRANSLATION_PATH,
@@ -10,6 +11,7 @@ import {
   // TRAINING_BLITZ_PATH,
   // TRAINING_RESULT_PATH,
 } from 'constants/path';
+import RootPage from './components/pages/RootPage/RootPage';
 import AllLanguagesPage from 'components/pages/AllLanguagesPage/AllLanguagesPage';
 import AllWordsPage from 'components/pages/AllWordsPage/AllWordsPage';
 import PhraseConstructorPage from 'components/pages/PhraseConstructorPage/PhraseConstructorPage';
@@ -48,6 +50,7 @@ function App() {
   return (
     <AppLayout>
       <Routes>
+        <Route path={ROOT_PATH} element={<RootPage />} />
         <Route path={ALL_LANGUAGES_PATH} element={<AllLanguagesPage />} />
         <Route path={ALL_WORDS_PATH} element={<AllWordsPage />} />
         <Route path={PHRASE_CONSTRUCTOR_PATH} element={<PhraseConstructorPage />} />
