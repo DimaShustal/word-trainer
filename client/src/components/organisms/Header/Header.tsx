@@ -1,6 +1,12 @@
 import { observer } from 'mobx-react-lite';
 import { Link, matchPath, useLocation } from 'react-router-dom';
-import { ALL_LANGUAGES_PATH, ALL_WORDS_PATH, PHRASE_CONSTRUCTOR_PATH, ROOT_PATH } from '../../../constants/path';
+import {
+  ALL_LANGUAGES_PATH,
+  ALL_WORDS_PATH,
+  LOGIN_PATH,
+  PHRASE_CONSTRUCTOR_PATH,
+  ROOT_PATH,
+} from '../../../constants/path';
 import { HeaderContainer, HeaderContent } from './Header.style';
 import Button from '../../atoms/Button';
 import { useAppContext } from '../../../contexts/AppContext';
@@ -11,10 +17,6 @@ function Header() {
   const { store } = useAppContext();
   const { pathname } = useLocation();
 
-  const loginHandler = () => {
-    // TODO implement login
-  };
-
   if (!store.user.isLogged) {
     return (
       <HeaderContainer>
@@ -23,7 +25,7 @@ function Header() {
             <Button type="text" size="medium" as={Link} to={ROOT_PATH} active={!!matchPath(pathname, ROOT_PATH)}>
               Главная
             </Button>
-            <Button type="text" size="medium" onClick={loginHandler}>
+            <Button type="text" size="medium" as={Link} to={LOGIN_PATH} active={!!matchPath(pathname, LOGIN_PATH)}>
               Войти
             </Button>
           </HeaderContent>

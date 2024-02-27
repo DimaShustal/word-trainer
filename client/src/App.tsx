@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import {
   ALL_LANGUAGES_PATH,
   ALL_WORDS_PATH,
+  LOGIN_PATH,
   PHRASE_CONSTRUCTOR_PATH,
   ROOT_PATH,
   // ALL_TRAININGS_PATH,
@@ -12,6 +13,7 @@ import {
   // TRAINING_RESULT_PATH,
 } from 'constants/path';
 import RootPage from './components/pages/RootPage/RootPage';
+import LoginPage from './components/pages/LoginPage/LoginPage';
 import AllLanguagesPage from 'components/pages/AllLanguagesPage/AllLanguagesPage';
 import AllWordsPage from 'components/pages/AllWordsPage/AllWordsPage';
 import PhraseConstructorPage from 'components/pages/PhraseConstructorPage/PhraseConstructorPage';
@@ -38,12 +40,12 @@ function App() {
   const { store } = useAppContext();
 
   useEffect(() => {
-    if (!store.user.isLoaded) store.user.fetchUser();
-  }, [store.wordList.isLoaded]);
+    if (store.user.isLogged && !store.user.isLoaded) store.user.fetchUser();
+  }, [store.user.isLogged, store.user.isLoaded]);
 
   useLogoutListener(store);
 
-  if (!store.user.isLoaded) {
+  if (store.user.isLogged && !store.user.isLoaded) {
     return <Loader />;
   }
 
@@ -51,6 +53,7 @@ function App() {
     <AppLayout>
       <Routes>
         <Route path={ROOT_PATH} element={<RootPage />} />
+        <Route path={LOGIN_PATH} element={<LoginPage />} />
         <Route path={ALL_LANGUAGES_PATH} element={<AllLanguagesPage />} />
         <Route path={ALL_WORDS_PATH} element={<AllWordsPage />} />
         <Route path={PHRASE_CONSTRUCTOR_PATH} element={<PhraseConstructorPage />} />
