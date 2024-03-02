@@ -1,6 +1,5 @@
 import { makeAutoObservable } from 'mobx';
 import AppStore from '../AppStore';
-import { SUPPORTED_LANGUAGES } from '../../constants/languages';
 import api from '../../functions/api';
 import { LOCAL_STORAGE_KEYS } from '../../constants/storage';
 import { ROOT_PATH } from '../../constants/path';
@@ -10,7 +9,7 @@ import normalizeYupError from '../../functions/normalizeGraphqlError';
 import { User as UserGraphql } from '../../__generated__/graphql';
 
 class User {
-  language: string | undefined;
+  currentLanguageId: string | undefined;
   isLoaded: boolean = false;
   isLogged: boolean | undefined;
 
@@ -24,11 +23,9 @@ class User {
     this.isLogged = !!localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN);
   }
 
-  setLanguage = (language: string): void => {
-    if (SUPPORTED_LANGUAGES.includes(language)) {
-      this.language = language;
-      localStorage.setItem('language', language);
-    }
+  setLanguage = (languageId: string): void => {
+    this.currentLanguageId = languageId;
+    localStorage.setItem(LOCAL_STORAGE_KEYS.CURRENT_LANGUAGE_ID, languageId);
   };
 
   fetchUser = async (): Promise<void> => {
@@ -40,7 +37,8 @@ class User {
         this.name = data.name;
         this.languages = data.languages;
 
-        this.language = localStorage.getItem('language') || 'EN';
+        this.currentLanguageId =
+          localStorage.getItem(LOCAL_STORAGE_KEYS.CURRENT_LANGUAGE_ID) || data.languages?.[0]?.id;
         this.isLoaded = true;
         this.isLogged = true;
       }
@@ -60,6 +58,7 @@ class User {
 
   logout = async (): Promise<void> => {
     localStorage.removeItem(LOCAL_STORAGE_KEYS.TOKEN);
+    localStorage.removeItem(LOCAL_STORAGE_KEYS.CURRENT_LANGUAGE_ID);
     await api.clearCache();
     window.location.href = ROOT_PATH;
   };

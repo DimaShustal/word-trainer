@@ -11,9 +11,9 @@ class WordList {
   constructor(private store: AppStore) {
     makeAutoObservable(this);
     reaction(
-      () => get(this.store.user, 'language'),
-      language => {
-        if (language && this.isLoaded) {
+      () => get(this.store.user, 'currentLanguageId'),
+      currentLanguageId => {
+        if (currentLanguageId && this.isLoaded) {
           this.words = [];
           this.isLoaded = false;
         }
@@ -28,7 +28,7 @@ class WordList {
 
   async fetchWords() {
     try {
-      const res = await fetch(`/data/${get(this.store.user, 'language')}_words.json`).then(res => res.json());
+      const res = await fetch(`/data/${get(this.store.user, 'currentLanguageId')}_words.json`).then(res => res.json());
 
       if (res?.status === 200 && res?.data) {
         this.setWords(res?.data);

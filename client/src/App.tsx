@@ -40,8 +40,11 @@ function App() {
   const { store } = useAppContext();
 
   useEffect(() => {
-    if (store.user.isLogged && !store.user.isLoaded) store.user.fetchUser();
-  }, [store.user.isLogged, store.user.isLoaded]);
+    if (store.user.isLogged) {
+      if (!store.user.isLoaded) store.user.fetchUser();
+      if (!store.languages.isLoaded) store.languages.fetchLanguages();
+    }
+  }, [store.user.isLogged]);
 
   useLogoutListener(store);
 
