@@ -7,15 +7,16 @@ import { ROOT_PATH } from '../../constants/path';
 import UserApi from './UserApi';
 import { ApolloError } from '@apollo/client';
 import normalizeYupError from '../../functions/normalizeGraphqlError';
+import { User as UserGraphql } from '../../__generated__/graphql';
 
 class User {
   language: string | undefined;
   isLoaded: boolean = false;
   isLogged: boolean | undefined;
 
-  id: string | undefined;
-  name: string | undefined;
-  languages: Array<any> | undefined;
+  id: UserGraphql['id'] | undefined;
+  name: UserGraphql['name'] | undefined;
+  languages: UserGraphql['languages'] | undefined;
 
   constructor(private store: AppStore) {
     makeAutoObservable(this);
@@ -23,14 +24,14 @@ class User {
     this.isLogged = !!localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN);
   }
 
-  setLanguage = (language: string) => {
+  setLanguage = (language: string): void => {
     if (SUPPORTED_LANGUAGES.includes(language)) {
       this.language = language;
       localStorage.setItem('language', language);
     }
   };
 
-  fetchUser = async () => {
+  fetchUser = async (): Promise<void> => {
     try {
       const data = await UserApi.fetchUser();
 
@@ -57,13 +58,13 @@ class User {
     }
   };
 
-  logout = async () => {
+  logout = async (): Promise<void> => {
     localStorage.removeItem(LOCAL_STORAGE_KEYS.TOKEN);
     await api.clearCache();
     window.location.href = ROOT_PATH;
   };
 
-  login = async (name, password) => {
+  login = async (name, password): Promise<boolean> => {
     try {
       const data = await UserApi.login(name, password);
 
@@ -84,10 +85,12 @@ class User {
       } else {
         console.error('User.login', error);
       }
+
+      return false;
     }
   };
 
-  createUser = async (name, password) => {
+  createUser = async (name, password): Promise<boolean> => {
     try {
       const data = await UserApi.createUser(name, password);
 
@@ -108,6 +111,8 @@ class User {
       } else {
         console.error('User.createUser', error);
       }
+
+      return false;
     }
   };
 }

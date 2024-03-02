@@ -42,8 +42,8 @@ const schema = buildSchema(`
   
   type Query {
     user: User
-    languages: [Language]!
-    userWords(languageId: ID!, perPage: Int!, page: Int!): UserWordResponse!
+    languages: [Language]
+    userWords(languageId: ID!, perPage: Int!, page: Int!): UserWordResponse
   }
 
   type Mutation {
