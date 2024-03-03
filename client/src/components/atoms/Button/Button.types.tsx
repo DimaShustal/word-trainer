@@ -107,6 +107,11 @@ export type ButtonRootProps = {
    * react-router-dom `to` prop
    */
   to?: string;
+
+  bMargin?: number;
+  lMargin?: number;
+  rMargin?: number;
+  tMargin?: number;
 };
 
 export type ButtonProps = ButtonRootProps & React.HTMLAttributes<unknown>;

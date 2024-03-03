@@ -41,6 +41,11 @@ const commonStyle = css<StyledButtonProps>`
   height: ${({ sConf }) => sConf.height};
   pointer-events: ${({ loading, disabled }) => (loading || disabled ? 'none' : 'auto')};
 
+  margin-bottom: ${({ bMargin }) => (bMargin ? pixelsToRems(bMargin) : 0)};
+  margin-left: ${({ lMargin }) => (lMargin ? pixelsToRems(lMargin) : 0)};
+  margin-right: ${({ rMargin }) => (rMargin ? pixelsToRems(rMargin) : 0)};
+  margin-top: ${({ tMargin }) => (tMargin ? pixelsToRems(tMargin) : 0)};
+
   &:hover {
     color: ${({ cConf }) => cConf.hover.text};
     background: ${({ cConf }) => cConf.hover.background};
