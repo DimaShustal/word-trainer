@@ -7,16 +7,25 @@ import Stack from '../../atoms/Stack';
 import Button from '../../atoms/Button';
 import Typography from '../../atoms/Typography';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Navigate } from 'react-router-dom';
+import { ALL_LANGUAGES_PATH } from '../../../constants/path';
 
 function AllWordsPage() {
   const { store } = useAppContext();
 
   useEffect(() => {
-    if (!store.wordList.isLoaded) store.wordList.fetchWords();
+    if (!store.wordList.isLoaded && !store.wordList.isLoading) store.wordList.fetchWords();
   }, [store.wordList.isLoaded]);
 
-  if (!store.wordList.isLoaded) {
-    return <Loader />;
+  if (!store.user.currentLanguageId) return <Navigate to={ALL_LANGUAGES_PATH} replace={true} />;
+  if (!store.wordList.isLoaded) return <Loader />;
+
+  if (!store.wordList.words.length) {
+    return (
+      <Container>
+        <Typography variant="h6">Слова отсутствуют</Typography>
+      </Container>
+    );
   }
 
   return (
@@ -38,6 +47,16 @@ function AllWordsPage() {
           </Stack>
         </WordContainer>
       ))}
+      {store.wordList.hasNextPage && (
+        <Button
+          size="medium"
+          loading={store.wordList.isLoading}
+          onClick={() => store.wordList.fetchWords()}
+          tMargin={20}
+        >
+          Загрузить еще
+        </Button>
+      )}
     </Container>
   );
 }

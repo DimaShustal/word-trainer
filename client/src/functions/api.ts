@@ -6,6 +6,7 @@ import { LOCAL_STORAGE_KEYS } from '../constants/storage';
 import { HOUR_IN_MILLISECONDS } from '../constants/time';
 import { onError } from '@apollo/client/link/error';
 import { POST_MESSAGE } from '../constants/message';
+import { QueryUserWordsArgs, UserWordResponse } from '../__generated__/graphql';
 
 let CLIENT;
 let PERSISTOR;
@@ -26,7 +27,55 @@ function setCacheLastUse() {
 }
 
 async function initApi() {
-  const cache = new InMemoryCache();
+  const cache = new InMemoryCache({
+    typePolicies: {
+      Query: {
+        fields: {
+          userWords: {
+            keyFields: ['languageId'],
+
+            merge(existing: UserWordResponse, incoming: UserWordResponse, options) {
+              const args = options.args as QueryUserWordsArgs;
+              const edges = existing?.edges ? existing.edges.slice(0) : [];
+              const start = (args.page - 1) * args.perPage;
+              const end = Math.min(args.page * args.perPage, incoming.pageInfo.totalCount);
+
+              for (let i = start; i < end; i += 1) {
+                edges[i] = incoming.edges[i - start];
+              }
+
+              return {
+                edges,
+                pageInfo: {
+                  hasNextPage: true,
+                  totalCount: incoming.pageInfo.totalCount,
+                },
+              };
+            },
+
+            read(existing: UserWordResponse, options) {
+              if (!existing?.edges?.length) return undefined;
+
+              const args = options.args as QueryUserWordsArgs;
+              const start = (args.page - 1) * args.perPage;
+              const end = args.page * args.perPage;
+              const edges = existing.edges.slice(start, end);
+
+              if (!edges.length) return undefined;
+
+              return {
+                edges,
+                pageInfo: {
+                  hasNextPage: end < existing.pageInfo.totalCount,
+                  totalCount: existing.pageInfo.totalCount,
+                },
+              };
+            },
+          },
+        },
+      },
+    },
+  });
 
   const httpLink = createHttpLink({
     uri: 'http://localhost:4000/graphql',

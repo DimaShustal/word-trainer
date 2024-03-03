@@ -1,27 +1,28 @@
 import { makeAutoObservable } from 'mobx';
-import { ICheckedPhrasePart, IPhrasePart, IWord, IWordData } from 'types/Word';
+import { ICheckedPhrasePart, IPhrasePart, IWord } from 'types/Word';
 import AppStore from '../AppStore';
+import { UserWord } from '../../__generated__/graphql';
+import { DAY_IN_MILLISECONDS } from '../../constants/time';
+
+const END_TIME_OF_LEARNED_STATUS = DAY_IN_MILLISECONDS * 10;
 
 class Word implements IWord {
-  word;
-  translation;
   id;
-  last_use;
-  category;
+  lastUse;
+  translation;
+  word;
   learned;
   isPhrase;
 
-  constructor(private store: AppStore, word: IWordData) {
+  constructor(private store: AppStore, word: UserWord) {
     makeAutoObservable(this);
 
-    this.word = word.word.trim();
-    this.translation = word.translation.trim();
     this.id = word.id;
-    this.last_use = word.last_use;
-    this.category = word.category;
-    this.learned = word.learned;
-
-    this.isPhrase = this.word.split(' ').length > 1;
+    this.lastUse = word.lastUse;
+    this.translation = word.translation;
+    this.word = word.word;
+    this.learned = word.lastUse && Date.now() - word.lastUse < END_TIME_OF_LEARNED_STATUS;
+    this.isPhrase = this.word.split(' ').length > 1 && this.translation.split(' ').length > 1;
   }
 
   get phraseParts() {
@@ -44,7 +45,7 @@ class Word implements IWord {
   }
 
   updateLastUse() {
-    this.last_use = Date.now();
+    this.lastUse = Date.now();
     // TODO - update word in database
   }
 }

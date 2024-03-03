@@ -1,12 +1,22 @@
 import { get, makeAutoObservable, reaction } from 'mobx';
-import { IWord, IWordData } from 'types/Word';
+import { IWord } from 'types/Word';
 import Word from '../Word/Word';
 import AppStore from '../AppStore';
 import random from '../../functions/random';
+import WordListApi from './WordListApi';
+import { UserWord } from '../../__generated__/graphql';
+import { ApolloError } from '@apollo/client';
+import normalizeYupError from '../../functions/normalizeGraphqlError';
+
+const PER_PAGE = 3;
+const INITIAL_PAGE = 1;
 
 class WordList {
   words: IWord[] = [];
+  page: number = INITIAL_PAGE;
+  hasNextPage: boolean = false;
   isLoaded: boolean = false;
+  isLoading: boolean = false;
 
   constructor(private store: AppStore) {
     makeAutoObservable(this);
@@ -15,27 +25,56 @@ class WordList {
       currentLanguageId => {
         if (currentLanguageId && this.isLoaded) {
           this.words = [];
+          this.page = INITIAL_PAGE;
+          this.hasNextPage = false;
           this.isLoaded = false;
+          this.isLoading = false;
         }
       },
     );
   }
 
-  setWords(data: IWordData[]) {
-    this.words = data.map(word => new Word(this.store, word));
-    this.isLoaded = true;
+  addWords(data: UserWord[]) {
+    if (!data.length) return;
+
+    this.words = [...this.words, ...data.map(word => new Word(this.store, word))];
   }
 
-  async fetchWords() {
-    try {
-      const res = await fetch(`/data/${get(this.store.user, 'currentLanguageId')}_words.json`).then(res => res.json());
+  async fetchWords(): Promise<void> {
+    this.isLoading = true;
 
-      if (res?.status === 200 && res?.data) {
-        this.setWords(res?.data);
+    try {
+      const currentLanguageId = get(this.store.user, 'currentLanguageId');
+
+      if (!currentLanguageId) {
+        // TODO add alerts
+        alert('Please select a language.');
+        return;
       }
-    } catch (e) {
-      console.error(e);
+
+      const data = await WordListApi.fetchUserWords(currentLanguageId, PER_PAGE, this.page);
+
+      if (data?.edges?.length) {
+        this.page += 1;
+        this.hasNextPage = data.pageInfo.hasNextPage;
+        this.addWords(data.edges || []);
+      }
+
+      this.isLoaded = true;
+    } catch (error) {
+      if (error instanceof ApolloError) {
+        const errorMessages = normalizeYupError(error);
+
+        // TODO add alerts
+        errorMessages?.forEach(message => {
+          alert(message);
+        });
+      } else {
+        console.error('WordList.fetchWords', error);
+      }
     }
+
+    this.isLoading = false;
   }
 
   get notLearnedWords() {
