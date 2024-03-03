@@ -60,6 +60,7 @@ function PhraseConstructor({ refresh }: IPhraseConstructorProps) {
   };
 
   if (!phrase.current) {
+    // TODO: add alert about all phrases are learned
     return <Navigate to={ALL_WORDS_PATH} replace={true} />;
   }
 

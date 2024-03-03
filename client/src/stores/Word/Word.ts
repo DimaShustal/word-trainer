@@ -3,6 +3,7 @@ import { ICheckedPhrasePart, IPhrasePart, IWord } from 'types/Word';
 import AppStore from '../AppStore';
 import { UserWord } from '../../__generated__/graphql';
 import { DAY_IN_MILLISECONDS } from '../../constants/time';
+import WordApi from './WordApi';
 
 const END_TIME_OF_LEARNED_STATUS = DAY_IN_MILLISECONDS * 10;
 
@@ -38,16 +39,19 @@ class Word implements IWord {
       .map((text, id) => ({ text, id }));
   }
 
-  checkPhraseParts(phraseParts: IPhrasePart[]) {
+  checkPhraseParts = (phraseParts: IPhrasePart[]) => {
     return phraseParts.reduce((result: ICheckedPhrasePart[], phrasePart: IPhrasePart, id) => {
       return [...result, { ...phrasePart, hasError: phrasePart.text !== this.phraseParts?.[id].text }];
     }, []);
-  }
+  };
 
-  updateLastUse() {
+  updateLastUse = () => {
     this.lastUse = Date.now();
-    // TODO - update word in database
-  }
+
+    if (this.store.user.currentLanguageId) {
+      WordApi.updateWords(this.store.user.currentLanguageId, [{ id: this.id, lastUse: this.lastUse }]);
+    }
+  };
 }
 
 export default Word;
