@@ -30,6 +30,7 @@ import Loader from './components/atoms/Loader/Loader';
 import { useAppContext } from './contexts/AppContext';
 import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev';
 import useLogoutListener from './functions/useLogoutListener';
+import AuthorizedRoute from './components/organisms/AuthorizedRoute/AuthorizedRoute';
 
 if (process.env.NODE_ENV !== 'production') {
   loadDevMessages();
@@ -57,9 +58,30 @@ function App() {
       <Routes>
         <Route path={ROOT_PATH} element={<RootPage />} />
         <Route path={LOGIN_PATH} element={<LoginPage />} />
-        <Route path={ALL_LANGUAGES_PATH} element={<AllLanguagesPage />} />
-        <Route path={ALL_WORDS_PATH} element={<AllWordsPage />} />
-        <Route path={PHRASE_CONSTRUCTOR_PATH} element={<PhraseConstructorPage />} />
+        <Route
+          path={ALL_LANGUAGES_PATH}
+          element={
+            <AuthorizedRoute>
+              <AllLanguagesPage />
+            </AuthorizedRoute>
+          }
+        />
+        <Route
+          path={ALL_WORDS_PATH}
+          element={
+            <AuthorizedRoute>
+              <AllWordsPage />
+            </AuthorizedRoute>
+          }
+        />
+        <Route
+          path={PHRASE_CONSTRUCTOR_PATH}
+          element={
+            <AuthorizedRoute>
+              <PhraseConstructorPage />
+            </AuthorizedRoute>
+          }
+        />
         {/*<Route path={ALL_TRAININGS_PATH} element={<AllTrainingsPage />} />*/}
         {/*<Route path={ADD_WORDS_PATH} element={<AddWordPage />} />*/}
         {/*<Route path={TRAINING_TRANSLATION_PATH} element={<TrainingTranslationPage />} />*/}
