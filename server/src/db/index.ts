@@ -55,6 +55,7 @@ const usersDb: IUser[] = [
           { id: '13', lastUse: 1702412348185 },
           { id: '14', lastUse: 1702412348185 },
           { id: '15', lastUse: 1702412348185 },
+          { id: '16', lastUse: 1702412348185 },
         ],
       },
     ],
@@ -84,8 +85,8 @@ const languagesDb: ILanguage[] = [
       { word: 'jak się masz?', translation: 'как дела?', id: '1' },
       { word: 'ile to kosztuje?', translation: 'сколько это стоит?', id: '2' },
       {
-        word: 'jestem z firmy ots, ale zapomniałem karty. czy mógłbyś mi pomóc?',
-        translation: 'я из компании ОТС, но я забыл карту. могли бы вы помочь мне подняться?',
+        word: 'jestem z firmy ots, ale zapomniałem karty.',
+        translation: 'я из компании ОТС, но я забыл карту.',
         id: '3',
       },
       {
@@ -108,6 +109,11 @@ const languagesDb: ILanguage[] = [
       { word: 'lubię deszcz.', translation: 'мне нравится дождь.', id: '13' },
       { word: 'lubię gotować.', translation: 'я люблю готовить.', id: '14' },
       { word: 'co to jest pepperoni?', translation: 'что такое пеперони?', id: '15' },
+      {
+        word: 'czy mógłbyś mi pomóc?',
+        translation: 'ты мог бы мне помочь?',
+        id: '16',
+      },
     ],
   },
 ];
