@@ -31,6 +31,34 @@ const usersDb: IUser[] = [
     salt: '$2b$10$naQhvIujs4kVSSTs7grxdu',
     languages: [],
   },
+  {
+    id: '4',
+    name: 'test@test.test',
+    passwordHash: '$2b$10$XPGEJ8hn.M3x0KDQUbHQReb.boqerAlfxg1nG1daW9LITFBjPPRMS',
+    salt: '$2b$10$XPGEJ8hn.M3x0KDQUbHQRe',
+    languages: [
+      {
+        id: '2',
+        words: [
+          { id: '1', lastUse: 1702412328185 },
+          { id: '2', lastUse: 1702412338185 },
+          { id: '3', lastUse: 1702412348185 },
+          { id: '4', lastUse: 1702412348185 },
+          { id: '5', lastUse: 1702412348185 },
+          { id: '6', lastUse: 1702412348185 },
+          { id: '7', lastUse: 1702412348185 },
+          { id: '8', lastUse: 1702412348185 },
+          { id: '9', lastUse: 1702412348185 },
+          { id: '10', lastUse: 1702412348185 },
+          { id: '11', lastUse: 1702412348185 },
+          { id: '12', lastUse: 1702412348185 },
+          { id: '13', lastUse: 1702412348185 },
+          { id: '14', lastUse: 1702412348185 },
+          { id: '15', lastUse: 1702412348185 },
+        ],
+      },
+    ],
+  },
 ];
 
 const languagesDb: ILanguage[] = [
@@ -53,13 +81,33 @@ const languagesDb: ILanguage[] = [
     code: 'pl',
     translationCode: 'ru',
     words: [
-      { word: 'Jak się masz?', translation: 'Как дела?', id: '1' },
-      { word: 'Ile to kosztuje?', translation: 'Сколько это стоит?', id: '2' },
+      { word: 'jak się masz?', translation: 'как дела?', id: '1' },
+      { word: 'ile to kosztuje?', translation: 'сколько это стоит?', id: '2' },
       {
-        word: 'Jestem z firmy OTS i zapomniałem karty, czy możesz mi pomóc?',
-        translation: 'Я из компании ОТС и я забыл карту, не могли бы вы помочь мне подняться?',
+        word: 'jestem z firmy ots, ale zapomniałem karty. czy mógłbyś mi pomóc?',
+        translation: 'я из компании ОТС, но я забыл карту. могли бы вы помочь мне подняться?',
         id: '3',
       },
+      {
+        word: 'potrzebuję tego do ubiegania się o nową kartę pobytu.',
+        translation: 'мне это нужно для подачи документов на новую карту побыта.',
+        id: '4',
+      },
+      { word: 'uwielbiam jeździć na rolkach.', translation: 'я любою кататься на роликах.', id: '5' },
+      { word: 'czy mogę w tym miejscu zasadzić drzewo?', translation: 'могу я посадить дерево в этом месте?', id: '6' },
+      { word: 'lubię twojego psa.', translation: 'мне нравится ваша собака.', id: '7' },
+      { word: 'ile lat ma twój pies?', translation: 'сколько лет твоей собаке?', id: '8' },
+      { word: 'czy możesz zważyć mniejszy kawałek?', translation: 'можете взвесить кусок поменьше?', id: '9' },
+      { word: 'czy możesz zważyć większy kawałek?', translation: 'можете взвесить кусок побольше?', id: '10' },
+      {
+        word: 'czy to normalna pogoda jak na tę porę roku?',
+        translation: 'это нормальная погода для этой поры года?',
+        id: '11',
+      },
+      { word: 'czy lubisz deszcz?', translation: 'вам нравится дождь?', id: '12' },
+      { word: 'lubię deszcz.', translation: 'мне нравится дождь.', id: '13' },
+      { word: 'lubię gotować.', translation: 'я люблю готовить.', id: '14' },
+      { word: 'co to jest pepperoni?', translation: 'что такое пеперони?', id: '15' },
     ],
   },
 ];
