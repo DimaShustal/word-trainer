@@ -89,7 +89,7 @@ class WordList {
     return this.words.filter(({ learned, isPhrase }) => !learned && isPhrase);
   }
 
-  getRandomPhrase() {
+  getRandomPhrase(): IWord | null {
     if (!this.phrases.length) {
       return null;
     }
