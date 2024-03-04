@@ -9,11 +9,11 @@ import { ApolloError } from '@apollo/client';
 import normalizeYupError from '../../functions/normalizeGraphqlError';
 
 const PER_PAGE = 3;
-const INITIAL_PAGE = 1;
+const INITIAL_TOTAL_COUNT = 1;
 
 class WordList {
   words: IWord[] = [];
-  page: number = INITIAL_PAGE;
+  totalCount: number = INITIAL_TOTAL_COUNT;
   hasNextPage: boolean = false;
   isLoaded: boolean = false;
   isLoading: boolean = false;
@@ -25,7 +25,7 @@ class WordList {
       currentLanguageId => {
         if (currentLanguageId && this.isLoaded) {
           this.words = [];
-          this.page = INITIAL_PAGE;
+          this.totalCount = INITIAL_TOTAL_COUNT;
           this.hasNextPage = false;
           this.isLoaded = false;
           this.isLoading = false;
@@ -52,10 +52,11 @@ class WordList {
         return;
       }
 
-      const data = await WordListApi.fetchUserWords(currentLanguageId, PER_PAGE, this.page);
+      const page = Math.floor(this.words.length / PER_PAGE) + 1;
+      const data = await WordListApi.fetchUserWords(currentLanguageId, PER_PAGE, page);
 
       if (data?.edges?.length) {
-        this.page += 1;
+        this.totalCount = data.pageInfo.totalCount;
         this.hasNextPage = data.pageInfo.hasNextPage;
         this.addWords(data.edges || []);
       }
@@ -120,6 +121,35 @@ class WordList {
 
     return this.words[randomIndex];
   }
+
+  removeWords = async (wordIds: string[]) => {
+    try {
+      const currentLanguageId = get(this.store.user, 'currentLanguageId');
+
+      if (!this.words.length || !wordIds.length || !currentLanguageId) return;
+
+      const success = await WordListApi.removeWords(currentLanguageId, wordIds);
+
+      if (!success) return;
+
+      this.words = this.words.filter(word => !wordIds.includes(word.id));
+
+      if (this.words.length === 0 && this.hasNextPage) {
+        this.isLoaded = false;
+      }
+    } catch (error) {
+      if (error instanceof ApolloError) {
+        const errorMessages = normalizeYupError(error);
+
+        // TODO add alerts
+        errorMessages?.forEach(message => {
+          alert(message);
+        });
+      } else {
+        console.error('WordList.removeWords', error);
+      }
+    }
+  };
 }
 
 export default WordList;

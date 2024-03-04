@@ -36,13 +36,15 @@ async function initApi() {
 
             merge(existing: UserWordResponse, incoming: UserWordResponse, options) {
               const args = options.args as QueryUserWordsArgs;
-              const edges = existing?.edges ? existing.edges.slice(0) : [];
+              let edges = existing?.edges ? existing.edges.slice(0) : [];
               const start = (args.page - 1) * args.perPage;
               const end = Math.min(args.page * args.perPage, incoming.pageInfo.totalCount);
 
               for (let i = start; i < end; i += 1) {
                 edges[i] = incoming.edges[i - start];
               }
+
+              edges = edges.filter(edge => !!edge);
 
               return {
                 edges,

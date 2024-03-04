@@ -10,7 +10,7 @@ export interface ICheckedPhrasePart extends IPhrasePart {
 export interface IWord {
   word: string;
   translation: string;
-  id: number;
+  id: string;
   lastUse: number;
   learned: boolean;
   isPhrase: boolean;

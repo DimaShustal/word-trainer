@@ -30,8 +30,8 @@ function AllWordsPage() {
 
   return (
     <Container>
-      {store.wordList.words.map(({ word, translation }, k) => (
-        <WordContainer key={k}>
+      {store.wordList.words.map(({ word, translation, id }) => (
+        <WordContainer key={id}>
           <Stack direction="column" alignItems="flex-start">
             <Typography variant="h6">{word}</Typography>
             <Typography variant="paragraphMedium" color="secondary1">
@@ -43,20 +43,19 @@ function AllWordsPage() {
               Статус
             </Button>
             <Button type="icon" Icon={EditOutlined} size="small" onClick={() => null} />
-            <Button type="icon" Icon={DeleteOutlined} size="small" onClick={() => null} />
+            <Button type="icon" Icon={DeleteOutlined} size="small" onClick={() => store.wordList.removeWords([id])} />
           </Stack>
         </WordContainer>
       ))}
-      {store.wordList.hasNextPage && (
-        <Button
-          size="medium"
-          loading={store.wordList.isLoading}
-          onClick={() => store.wordList.fetchWords()}
-          tMargin={20}
-        >
-          Загрузить еще
-        </Button>
-      )}
+      <Button
+        size="medium"
+        disabled={!store.wordList.hasNextPage}
+        loading={store.wordList.isLoading}
+        onClick={() => store.wordList.fetchWords()}
+        tMargin={20}
+      >
+        Загрузить еще
+      </Button>
     </Container>
   );
 }
