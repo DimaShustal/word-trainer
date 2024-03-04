@@ -4,6 +4,8 @@ import AppStore from '../AppStore';
 import { UserWord } from '../../__generated__/graphql';
 import { DAY_IN_MILLISECONDS } from '../../constants/time';
 import WordApi from './WordApi';
+import { ApolloError } from '@apollo/client';
+import normalizeYupError from '../../functions/normalizeGraphqlError';
 
 const END_TIME_OF_LEARNED_STATUS = DAY_IN_MILLISECONDS * 10;
 
@@ -46,10 +48,23 @@ class Word implements IWord {
   };
 
   updateLastUse = () => {
-    this.lastUse = Date.now();
+    try {
+      this.lastUse = Date.now();
 
-    if (this.store.user.currentLanguageId) {
-      WordApi.updateWords(this.store.user.currentLanguageId, [{ id: this.id, lastUse: this.lastUse }]);
+      if (this.store.user.currentLanguageId) {
+        WordApi.updateWords(this.store.user.currentLanguageId, [{ id: this.id, lastUse: this.lastUse }]);
+      }
+    } catch (error) {
+      if (error instanceof ApolloError) {
+        const errorMessages = normalizeYupError(error);
+
+        // TODO add alerts
+        errorMessages?.forEach(message => {
+          alert(message);
+        });
+      } else {
+        console.error('Word.updateLastUse', error);
+      }
     }
   };
 }
