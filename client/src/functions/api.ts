@@ -36,9 +36,10 @@ async function initApi() {
 
             merge(existing: UserWordResponse, incoming: UserWordResponse, options) {
               const args = options.args as QueryUserWordsArgs;
-              let edges = existing?.edges ? existing.edges.slice(0) : [];
-              const start = (args.page - 1) * args.perPage;
-              const end = Math.min(args.page * args.perPage, incoming.pageInfo.totalCount);
+              const start = args.offset;
+              // end should not be more than totalCount and not less than 0
+              const end = Math.max(Math.min(args.offset + args.limit, incoming.pageInfo.totalCount), 0);
+              let edges = existing?.edges ? existing.edges.slice(0, end) : [];
 
               for (let i = start; i < end; i += 1) {
                 edges[i] = incoming.edges[i - start];
@@ -59,8 +60,8 @@ async function initApi() {
               if (!existing?.edges?.length) return undefined;
 
               const args = options.args as QueryUserWordsArgs;
-              const start = (args.page - 1) * args.perPage;
-              const end = args.page * args.perPage;
+              const start = args.offset;
+              const end = args.offset + args.limit;
               const edges = existing.edges.slice(start, end);
 
               if (!edges.length) return undefined;

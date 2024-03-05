@@ -54,8 +54,7 @@ class WordList {
         return;
       }
 
-      const page = Math.floor(this.words.length / PER_PAGE) + 1;
-      const data = await WordListApi.fetchUserWords(currentLanguageId, PER_PAGE, page);
+      const data = await WordListApi.fetchUserWords(currentLanguageId, this.words.length, PER_PAGE);
 
       if (data?.edges?.length) {
         this.totalCount = data.pageInfo.totalCount;
@@ -130,7 +129,7 @@ class WordList {
 
       if (!this.words.length || !wordIds.length || !currentLanguageId) return;
 
-      const success = await WordListApi.removeWords(currentLanguageId, wordIds);
+      const success = await WordListApi.removeWords(currentLanguageId, wordIds, this.words.length);
 
       if (!success) return;
 

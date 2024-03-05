@@ -3,8 +3,8 @@ import { gql } from '@apollo/client';
 import { Mutation, Query } from '../../__generated__/graphql';
 
 const UserWordsQuery = gql`
-  query UserWords($languageId: ID!, $perPage: Int!, $page: Int!) {
-    userWords(languageId: $languageId, perPage: $perPage, page: $page) {
+  query UserWords($languageId: ID!, $offset: Int!, $limit: Int!) {
+    userWords(languageId: $languageId, offset: $offset, limit: $limit) {
       edges {
         id
         word
@@ -19,21 +19,25 @@ const UserWordsQuery = gql`
   }
 `;
 
-async function fetchUserWords(languageId: string, perPage: number, page: number): Promise<Query['userWords']> {
+async function fetchUserWords(languageId: string, offset: number, limit: number): Promise<Query['userWords']> {
   const client = await api.getClient();
   const { data } = await client.query<Query>({
     query: UserWordsQuery,
     variables: {
       languageId,
-      perPage,
-      page,
+      offset,
+      limit,
     },
   });
 
   return data?.userWords as Query['userWords'];
 }
 
-async function removeWords(languageId: string, wordIds: string[]): Promise<Mutation['removeWords']> {
+async function removeWords(
+  languageId: string,
+  wordIds: string[],
+  wordsLimit: number,
+): Promise<Mutation['removeWords']> {
   const client = await api.getClient();
 
   const { data } = await client.mutate<Mutation>({
@@ -53,8 +57,8 @@ async function removeWords(languageId: string, wordIds: string[]): Promise<Mutat
       query: UserWordsQuery,
       variables: {
         languageId: languageId,
-        page: 1,
-        perPage: 1000,
+        offset: 0,
+        limit: wordsLimit,
       },
     });
 
@@ -74,8 +78,8 @@ async function removeWords(languageId: string, wordIds: string[]): Promise<Mutat
         query: UserWordsQuery,
         variables: {
           languageId: languageId,
-          page: 1,
-          perPage: 1000,
+          offset: 0,
+          limit: wordsLimit,
         },
         data: newData,
       });
