@@ -41,6 +41,8 @@ class WordList {
   }
 
   async fetchWords(): Promise<void> {
+    if (this.isLoading) return;
+
     this.isLoading = true;
 
     try {

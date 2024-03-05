@@ -3,7 +3,7 @@ import { useAppContext } from '../../../contexts/AppContext';
 import { useEffect, useState } from 'react';
 import Loader from '../../atoms/Loader/Loader';
 import { Navigate } from 'react-router-dom';
-import { ALL_WORDS_PATH } from '../../../constants/path';
+import { ALL_LANGUAGES_PATH, ALL_WORDS_PATH } from '../../../constants/path';
 import PhraseConstructor from '../../organisms/PhraseConstructor/PhraseConstructor';
 
 function PhraseConstructorPage() {
@@ -18,13 +18,9 @@ function PhraseConstructorPage() {
     if (!store.wordList.isLoaded) store.wordList.fetchWords();
   }, [store.wordList.isLoaded]);
 
-  if (!store.wordList.isLoaded) {
-    return <Loader />;
-  }
-
-  if (!store.wordList.phrases?.length) {
-    return <Navigate to={ALL_WORDS_PATH} replace={true} />;
-  }
+  if (!store.user.currentLanguageId) return <Navigate to={ALL_LANGUAGES_PATH} replace={true} />;
+  if (!store.wordList.isLoaded) return <Loader />;
+  if (!store.wordList.phrases?.length) return <Navigate to={ALL_WORDS_PATH} replace={true} />;
 
   return <PhraseConstructor key={key} refresh={refresh} />;
 }

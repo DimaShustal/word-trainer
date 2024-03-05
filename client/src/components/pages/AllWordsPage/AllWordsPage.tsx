@@ -14,7 +14,7 @@ function AllWordsPage() {
   const { store } = useAppContext();
 
   useEffect(() => {
-    if (!store.wordList.isLoaded && !store.wordList.isLoading) store.wordList.fetchWords();
+    if (!store.wordList.isLoaded) store.wordList.fetchWords();
   }, [store.wordList.isLoaded]);
 
   if (!store.user.currentLanguageId) return <Navigate to={ALL_LANGUAGES_PATH} replace={true} />;
