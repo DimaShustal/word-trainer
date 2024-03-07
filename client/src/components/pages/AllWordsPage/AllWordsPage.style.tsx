@@ -28,9 +28,11 @@ export const AddButton = styled(Link)`
   right: ${pixelsToRems(50)};
   color: ${getColor('primary2')};
   background: ${getColor('secondary3')};
+  border: 1px solid ${getColor('primary2')};
   border-radius: 50%;
   padding: ${pixelsToRems(20)};
   font-size: ${pixelsToRems(30)};
+  z-index: 120;
 
   &:hover {
     color: ${getColor('primary2')}cc;
