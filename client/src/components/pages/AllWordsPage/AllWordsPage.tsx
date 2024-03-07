@@ -2,13 +2,13 @@ import { useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useAppContext } from '../../../contexts/AppContext';
 import Loader from '../../atoms/Loader/Loader';
-import { Container, WordContainer } from './AllWordsPage.style';
+import { Container, WordContainer, AddButton } from './AllWordsPage.style';
 import Stack from '../../atoms/Stack';
 import Button from '../../atoms/Button';
 import Typography from '../../atoms/Typography';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { Navigate } from 'react-router-dom';
-import { ALL_LANGUAGES_PATH } from '../../../constants/path';
+import { ADD_WORDS_PATH, ALL_LANGUAGES_PATH } from '../../../constants/path';
 
 function AllWordsPage() {
   const { store } = useAppContext();
@@ -24,6 +24,9 @@ function AllWordsPage() {
     return (
       <Container>
         <Typography variant="h6">Слова отсутствуют</Typography>
+        <AddButton to={ADD_WORDS_PATH}>
+          <PlusOutlined />
+        </AddButton>
       </Container>
     );
   }
@@ -56,6 +59,9 @@ function AllWordsPage() {
       >
         Загрузить еще
       </Button>
+      <AddButton to={ADD_WORDS_PATH}>
+        <PlusOutlined />
+      </AddButton>
     </Container>
   );
 }

@@ -129,7 +129,7 @@ class WordList {
 
       if (!this.words.length || !wordIds.length || !currentLanguageId) return;
 
-      const success = await WordListApi.removeWords(currentLanguageId, wordIds, this.words.length);
+      const success = await WordListApi.removeWords(currentLanguageId, wordIds, this.totalCount);
 
       if (!success) return;
 
@@ -148,6 +148,33 @@ class WordList {
         });
       } else {
         console.error('WordList.removeWords', error);
+      }
+    }
+  };
+
+  addWordsFromTranslation = async (translation: string[]): Promise<void> => {
+    try {
+      const currentLanguageId = get(this.store.user, 'currentLanguageId');
+
+      if (!translation.length || !currentLanguageId) return;
+
+      const newWords = await WordListApi.addWordsFromTranslation(currentLanguageId, translation, this.totalCount);
+
+      if (newWords?.length) {
+        this.addWords(newWords as UserWord[]);
+      }
+
+      alert('Words added successfully');
+    } catch (error) {
+      if (error instanceof ApolloError) {
+        const errorMessages = normalizeYupError(error);
+
+        // TODO add alerts
+        errorMessages?.forEach(message => {
+          alert(message);
+        });
+      } else {
+        console.error('WordList.addWordsFromTranslation', error);
       }
     }
   };

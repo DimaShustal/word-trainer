@@ -50,8 +50,7 @@ async function initApi() {
               return {
                 edges,
                 pageInfo: {
-                  hasNextPage: true,
-                  totalCount: incoming.pageInfo.totalCount,
+                  ...incoming.pageInfo,
                 },
               };
             },

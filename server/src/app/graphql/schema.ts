@@ -49,7 +49,7 @@ const schema = buildSchema(`
   type Mutation {
     createUser(name: String!, password: String!): String
     login(name: String!, password: String!): String
-    addWordsFromTranslation(languageId: ID!, translations: [String]!): Boolean
+    addWordsFromTranslation(languageId: ID!, translations: [String]!): [UserWord]
     updateWords(languageId: ID!, words: [UserWordInput]!): Boolean
     removeWords(languageId: ID!, wordIds: [ID]!): Boolean
   }

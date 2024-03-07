@@ -8,12 +8,17 @@ import { Language as LanguageGraphql, Maybe } from '../../__generated__/graphql'
 class Languages {
   list: Array<Maybe<LanguageGraphql>> | undefined;
   isLoaded: boolean = false;
+  isLoading: boolean = false;
 
   constructor(private store: AppStore) {
     makeAutoObservable(this);
   }
 
   fetchLanguages = async (): Promise<void> => {
+    if (this.isLoading) return;
+
+    this.isLoading = true;
+
     try {
       const data = await LanguagesApi.fetchLanguages();
 
@@ -33,6 +38,8 @@ class Languages {
         console.error('Languages.fetchLanguages', error);
       }
     }
+
+    this.isLoading = false;
   };
 }
 

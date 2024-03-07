@@ -1,12 +1,12 @@
 import { Routes, Route } from 'react-router-dom';
 import {
+  ADD_WORDS_PATH,
   ALL_LANGUAGES_PATH,
   ALL_WORDS_PATH,
   LOGIN_PATH,
   PHRASE_CONSTRUCTOR_PATH,
   ROOT_PATH,
   // ALL_TRAININGS_PATH,
-  // ADD_WORDS_PATH,
   // TRAINING_TRANSLATION_PATH,
   // TRAINING_WRITING_PATH,
   // TRAINING_BLITZ_PATH,
@@ -31,6 +31,7 @@ import { useAppContext } from './contexts/AppContext';
 import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev';
 import useLogoutListener from './functions/useLogoutListener';
 import AuthorizedRoute from './components/organisms/AuthorizedRoute/AuthorizedRoute';
+import AddWordsPage from './components/pages/AddWordsPage/AddWordsPage';
 
 if (process.env.NODE_ENV !== 'production') {
   loadDevMessages();
@@ -82,8 +83,15 @@ function App() {
             </AuthorizedRoute>
           }
         />
+        <Route
+          path={ADD_WORDS_PATH}
+          element={
+            <AuthorizedRoute>
+              <AddWordsPage />
+            </AuthorizedRoute>
+          }
+        />
         {/*<Route path={ALL_TRAININGS_PATH} element={<AllTrainingsPage />} />*/}
-        {/*<Route path={ADD_WORDS_PATH} element={<AddWordPage />} />*/}
         {/*<Route path={TRAINING_TRANSLATION_PATH} element={<TrainingTranslationPage />} />*/}
         {/*<Route path={TRAINING_WRITING_PATH} element={<TrainingWritingPage />} />*/}
         {/*<Route path={TRAINING_BLITZ_PATH} element={<TrainingBlitzPage />} />*/}

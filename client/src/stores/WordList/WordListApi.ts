@@ -2,14 +2,32 @@ import api from '../../functions/api';
 import { gql } from '@apollo/client';
 import { Mutation, Query } from '../../__generated__/graphql';
 
+const DEFAULT_CACHE_USER_WORDS = {
+  userWords: {
+    edges: [],
+    pageInfo: {
+      hasNextPage: false,
+      totalCount: 0,
+    },
+  },
+};
+
+const UserWordsEdge = gql`
+  fragment UserWordsEdge on UserWord {
+    id
+    word
+    translation
+    lastUse
+  }
+`;
+
 const UserWordsQuery = gql`
+  ${UserWordsEdge}
+
   query UserWords($languageId: ID!, $offset: Int!, $limit: Int!) {
     userWords(languageId: $languageId, offset: $offset, limit: $limit) {
       edges {
-        id
-        word
-        translation
-        lastUse
+        ...UserWordsEdge
       }
       pageInfo {
         totalCount
@@ -36,7 +54,7 @@ async function fetchUserWords(languageId: string, offset: number, limit: number)
 async function removeWords(
   languageId: string,
   wordIds: string[],
-  wordsLimit: number,
+  totalCount: number,
 ): Promise<Mutation['removeWords']> {
   const client = await api.getClient();
 
@@ -58,7 +76,7 @@ async function removeWords(
       variables: {
         languageId: languageId,
         offset: 0,
-        limit: wordsLimit,
+        limit: totalCount,
       },
     });
 
@@ -79,7 +97,7 @@ async function removeWords(
         variables: {
           languageId: languageId,
           offset: 0,
-          limit: wordsLimit,
+          limit: newData.userWords.edges.length,
         },
         data: newData,
       });
@@ -89,9 +107,69 @@ async function removeWords(
   return data?.removeWords as Mutation['removeWords'];
 }
 
+async function addWordsFromTranslation(
+  languageId: string,
+  translations: string[],
+  totalCount: number,
+): Promise<Mutation['addWordsFromTranslation']> {
+  const client = await api.getClient();
+
+  const { data } = await client.mutate<Mutation>({
+    mutation: gql`
+      ${UserWordsEdge}
+
+      mutation AddWordsFromTranslation($languageId: ID!, $translations: [String]!) {
+        addWordsFromTranslation(languageId: $languageId, translations: $translations) {
+          ...UserWordsEdge
+        }
+      }
+    `,
+    variables: {
+      languageId,
+      translations,
+    },
+  });
+
+  if (data?.addWordsFromTranslation?.length) {
+    const cachedUserWords =
+      client.readQuery({
+        query: UserWordsQuery,
+        variables: {
+          languageId: languageId,
+          offset: 0,
+          limit: totalCount,
+        },
+      }) || DEFAULT_CACHE_USER_WORDS;
+
+    const newData = {
+      userWords: {
+        ...cachedUserWords.userWords,
+        edges: [...data.addWordsFromTranslation, ...cachedUserWords.userWords.edges],
+        pageInfo: {
+          ...cachedUserWords.userWords.pageInfo,
+          totalCount: cachedUserWords.userWords.pageInfo.totalCount + data.addWordsFromTranslation.length,
+        },
+      },
+    };
+
+    client.writeQuery({
+      query: UserWordsQuery,
+      variables: {
+        languageId: languageId,
+        offset: 0,
+        limit: newData.userWords.edges.length,
+      },
+      data: newData,
+    });
+  }
+
+  return data?.addWordsFromTranslation as Mutation['addWordsFromTranslation'];
+}
+
 const WordListApi = {
   fetchUserWords,
   removeWords,
+  addWordsFromTranslation,
 };
 
 export default WordListApi;

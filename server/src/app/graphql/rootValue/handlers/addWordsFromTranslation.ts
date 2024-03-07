@@ -3,6 +3,7 @@ import { IContext, ILanguage, ILanguageWord, IUserLanguage, IUserWord } from '..
 import getUserFromContext from '../../../functions/getUserFromContext.js';
 import getNormalizedWord from '../../../functions/getNormalizedWord.js';
 import translateText from '../../../functions/translateText.js';
+import { IUserWordEdge } from '../types.js';
 
 async function addWordsFromTranslation(
   { languageId, translations }: { languageId: string; translations: string[] },
@@ -50,7 +51,7 @@ async function addWordsFromTranslation(
   const translatedWords = await translateText(translationsToCreate, language.translationCode, language.code);
 
   const languageWordsNew = translatedWords.map((word: string, id: number) => {
-    return { id: uuidv4(), word, translation: translationsToCreate[id] };
+    return { id: uuidv4(), word: word.toLowerCase(), translation: translationsToCreate[id] };
   });
 
   const userWords = [...languageWords, ...languageWordsNew]
@@ -61,10 +62,18 @@ async function addWordsFromTranslation(
       return { id: languageWord.id, lastUse: 0 };
     });
 
-  userLanguage.words = [...userLanguage.words, ...userWords];
-  language.words = [...language.words, ...languageWordsNew];
+  userLanguage.words = [...userWords, ...userLanguage.words];
+  language.words = [...languageWordsNew, ...language.words];
 
-  return true;
+  return userWords.reduce((result: IUserWordEdge[], userWord: IUserWord) => {
+    const languageWord = language.words.find((languageWord: ILanguageWord) => languageWord.id === userWord.id);
+
+    if (!languageWord) {
+      return result;
+    }
+
+    return [...result, { ...languageWord, lastUse: userWord.lastUse }];
+  }, []);
 }
 
 export default addWordsFromTranslation;

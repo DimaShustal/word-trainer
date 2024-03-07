@@ -11,6 +11,7 @@ import { User as UserGraphql } from '../../__generated__/graphql';
 class User {
   currentLanguageId: string | undefined;
   isLoaded: boolean = false;
+  isLoading: boolean = false;
   isLogged: boolean | undefined;
 
   id: UserGraphql['id'] | undefined;
@@ -29,6 +30,10 @@ class User {
   };
 
   fetchUser = async (): Promise<void> => {
+    if (this.isLoading) return;
+
+    this.isLoading = true;
+
     try {
       const data = await UserApi.fetchUser();
 
@@ -54,6 +59,8 @@ class User {
         console.error('User.fetchUser', error);
       }
     }
+
+    this.isLoading = false;
   };
 
   logout = async (): Promise<void> => {
