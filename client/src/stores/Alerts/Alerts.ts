@@ -10,7 +10,7 @@ class Alerts {
     makeAutoObservable(this);
   }
 
-  addAlert = (alert: NewAlert): void => {
+  showAlert = (alert: NewAlert): void => {
     this.stack = [{ ...alert, id: uuidv4() }, ...this.stack];
   };
 

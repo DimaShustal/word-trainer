@@ -31,7 +31,7 @@ class Languages {
         const errorMessages = normalizeYupError(error);
 
         errorMessages?.forEach(message => {
-          this.store.alerts.addAlert({ message, type: 'error' });
+          this.store.alerts.showAlert({ message, type: 'error' });
         });
       } else {
         console.error('Languages.fetchLanguages', error);

@@ -49,7 +49,7 @@ class WordList {
       const currentLanguageId = get(this.store.user, 'currentLanguageId');
 
       if (!currentLanguageId) {
-        this.store.alerts.addAlert({ message: 'Выберите язык', type: 'error' });
+        this.store.alerts.showAlert({ message: 'Выберите язык', type: 'error' });
         return;
       }
 
@@ -67,7 +67,7 @@ class WordList {
         const errorMessages = normalizeYupError(error);
 
         errorMessages?.forEach(message => {
-          this.store.alerts.addAlert({ message, type: 'error' });
+          this.store.alerts.showAlert({ message, type: 'error' });
         });
       } else {
         console.error('WordList.fetchWords', error);
@@ -141,7 +141,7 @@ class WordList {
         const errorMessages = normalizeYupError(error);
 
         errorMessages?.forEach(message => {
-          this.store.alerts.addAlert({ message, type: 'error' });
+          this.store.alerts.showAlert({ message, type: 'error' });
         });
       } else {
         console.error('WordList.removeWords', error);
@@ -161,13 +161,13 @@ class WordList {
         this.addWords(newWords as UserWord[]);
       }
 
-      this.store.alerts.addAlert({ message: 'Слова успешно добавлены', type: 'success' });
+      this.store.alerts.showAlert({ message: 'Слова успешно добавлены', type: 'success' });
     } catch (error) {
       if (error instanceof ApolloError) {
         const errorMessages = normalizeYupError(error);
 
         errorMessages?.forEach(message => {
-          this.store.alerts.addAlert({ message, type: 'error' });
+          this.store.alerts.showAlert({ message, type: 'error' });
         });
       } else {
         console.error('WordList.addWordsFromTranslation', error);

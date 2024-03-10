@@ -52,7 +52,7 @@ class User {
         const errorMessages = normalizeYupError(error);
 
         errorMessages?.forEach(message => {
-          this.store.alerts.addAlert({ message, type: 'error' });
+          this.store.alerts.showAlert({ message, type: 'error' });
         });
       } else {
         console.error('User.fetchUser', error);
@@ -84,7 +84,7 @@ class User {
         const errorMessages = normalizeYupError(error);
 
         errorMessages?.forEach(message => {
-          this.store.alerts.addAlert({ message, type: 'error' });
+          this.store.alerts.showAlert({ message, type: 'error' });
         });
       } else {
         console.error('User.login', error);
@@ -109,7 +109,7 @@ class User {
         const errorMessages = normalizeYupError(error);
 
         errorMessages?.forEach(message => {
-          this.store.alerts.addAlert({ message, type: 'error' });
+          this.store.alerts.showAlert({ message, type: 'error' });
         });
       } else {
         console.error('User.createUser', error);
