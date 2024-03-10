@@ -2,8 +2,11 @@ import bcrypt from 'bcrypt';
 import { IContext, IUser } from '../../../../types/index.js';
 import { generateToken } from '../../../functions/authorization.js';
 import { IUserCredentials } from '../types.js';
+import loginValidationSchema from '../../../constants/loginValidationSchema.js';
 
 async function createUser({ name, password }: IUserCredentials, context: IContext): Promise<string> {
+  await loginValidationSchema.validate({ name, password }, { abortEarly: false });
+
   const existingUser = context.db.users.find(user => user.name === name);
 
   if (existingUser) {

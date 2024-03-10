@@ -50,8 +50,7 @@ function LoginPage() {
       setPasswordError('');
 
       await validationSchema.validate({ name, password }, { abortEarly: false });
-
-      callback(name, password);
+      await callback(name, password);
     } catch (error) {
       if (error instanceof yup.ValidationError) {
         const yupErrors = normalizeYupError(error);

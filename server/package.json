@@ -18,7 +18,8 @@
     "graphql-http": "^1.22.0",
     "jsonwebtoken": "^9.0.2",
     "nodemon": "^2.0.2",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
