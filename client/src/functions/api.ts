@@ -32,14 +32,14 @@ async function initApi() {
       Query: {
         fields: {
           userWords: {
-            keyFields: ['languageId'],
+            keyFields: false,
 
             merge(existing: UserWordResponse, incoming: UserWordResponse, options) {
               const args = options.args as QueryUserWordsArgs;
               const start = args.offset;
               // end should not be more than totalCount and not less than 0
               const end = Math.max(Math.min(args.offset + args.limit, incoming.pageInfo.totalCount), 0);
-              let edges = existing?.edges ? existing.edges.slice(0, end) : [];
+              let edges = existing?.[args.languageId]?.edges ? existing[args.languageId].edges.slice(0, end) : [];
 
               for (let i = start; i < end; i += 1) {
                 edges[i] = incoming.edges[i - start];
@@ -48,28 +48,32 @@ async function initApi() {
               edges = edges.filter(edge => !!edge);
 
               return {
-                edges,
-                pageInfo: {
-                  ...incoming.pageInfo,
+                ...existing,
+                [args.languageId]: {
+                  edges,
+                  pageInfo: {
+                    ...incoming.pageInfo,
+                  },
                 },
               };
             },
 
             read(existing: UserWordResponse, options) {
-              if (!existing?.edges?.length) return undefined;
-
               const args = options.args as QueryUserWordsArgs;
+
+              if (!existing?.[args.languageId]?.edges?.length) return undefined;
+
               const start = args.offset;
               const end = args.offset + args.limit;
-              const edges = existing.edges.slice(start, end);
+              const edges = existing[args.languageId].edges.slice(start, end);
 
               if (!edges.length) return undefined;
 
               return {
                 edges,
                 pageInfo: {
-                  hasNextPage: end < existing.pageInfo.totalCount,
-                  totalCount: existing.pageInfo.totalCount,
+                  hasNextPage: end < existing[args.languageId].pageInfo.totalCount,
+                  totalCount: existing[args.languageId].pageInfo.totalCount,
                 },
               };
             },
