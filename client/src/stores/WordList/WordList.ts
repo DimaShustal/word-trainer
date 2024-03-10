@@ -34,13 +34,25 @@ class WordList {
     );
   }
 
-  addWords(data: UserWord[]) {
+  get notLearnedWords(): IWord[] {
+    return this.words.filter(({ learned }) => !learned);
+  }
+
+  get phrases(): IWord[] {
+    return this.words.filter(({ isPhrase }) => isPhrase);
+  }
+
+  get notLearnedPhrase(): IWord[] {
+    return this.words.filter(({ learned, isPhrase }) => !learned && isPhrase);
+  }
+
+  addWords = (data: UserWord[]): void => {
     if (!data.length) return;
 
     this.words = [...this.words, ...data.map(word => new Word(this.store, word))];
-  }
+  };
 
-  async fetchWords(): Promise<void> {
+  fetchWords = async (): Promise<void> => {
     if (this.isLoading) return;
 
     this.isLoading = true;
@@ -75,21 +87,9 @@ class WordList {
     }
 
     this.isLoading = false;
-  }
+  };
 
-  get notLearnedWords() {
-    return this.words.filter(({ learned }) => !learned);
-  }
-
-  get phrases() {
-    return this.words.filter(({ isPhrase }) => isPhrase);
-  }
-
-  get notLearnedPhrase() {
-    return this.words.filter(({ learned, isPhrase }) => !learned && isPhrase);
-  }
-
-  getRandomPhrase(): IWord | null {
+  getRandomPhrase = (): IWord | null => {
     if (!this.phrases.length) {
       return null;
     }
@@ -103,9 +103,9 @@ class WordList {
     const randomIndex = random(0, this.phrases.length - 1);
 
     return this.phrases[randomIndex];
-  }
+  };
 
-  getRandomWord() {
+  getRandomWord = (): IWord | null => {
     if (!this.words.length) {
       return null;
     }
@@ -119,9 +119,9 @@ class WordList {
     const randomIndex = random(0, this.words.length - 1);
 
     return this.words[randomIndex];
-  }
+  };
 
-  removeWords = async (wordIds: string[]) => {
+  removeWords = async (wordIds: string[]): Promise<void> => {
     try {
       const currentLanguageId = get(this.store.user, 'currentLanguageId');
 

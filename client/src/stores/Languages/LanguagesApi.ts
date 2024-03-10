@@ -6,7 +6,7 @@ async function fetchLanguages(): Promise<Query['languages']> {
   const client = await api.getClient();
   const { data } = await client.query<Query>({
     query: gql`
-      query {
+      query Languages {
         languages {
           id
           name

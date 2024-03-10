@@ -6,7 +6,7 @@ async function fetchUser(): Promise<Query['user']> {
   const client = await api.getClient();
   const { data } = await client.query<Query>({
     query: gql`
-      query {
+      query User {
         user {
           id
           name

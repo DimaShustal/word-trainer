@@ -28,7 +28,7 @@ class Word implements IWord {
     this.isPhrase = this.word.split(' ').length > 1 && this.translation.split(' ').length > 1;
   }
 
-  get phraseParts() {
+  get phraseParts(): IPhrasePart[] | null {
     if (!this.isPhrase) {
       return null;
     }
@@ -41,13 +41,13 @@ class Word implements IWord {
       .map((text, id) => ({ text, id }));
   }
 
-  checkPhraseParts = (phraseParts: IPhrasePart[]) => {
+  checkPhraseParts = (phraseParts: IPhrasePart[]): ICheckedPhrasePart[] => {
     return phraseParts.reduce((result: ICheckedPhrasePart[], phrasePart: IPhrasePart, id) => {
       return [...result, { ...phrasePart, hasError: phrasePart.text !== this.phraseParts?.[id].text }];
     }, []);
   };
 
-  updateLastUse = () => {
+  updateLastUse = (): void => {
     try {
       this.lastUse = Date.now();
 
