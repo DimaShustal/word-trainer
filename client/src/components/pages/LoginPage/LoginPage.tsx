@@ -26,8 +26,8 @@ const validationSchema = yup.object().shape({
 function LoginPage() {
   const { store } = useAppContext();
 
-  const [name, setName] = useState();
-  const [password, setPassword] = useState();
+  const [name, setName] = useState('');
+  const [password, setPassword] = useState('');
 
   const [nameError, setNameError] = useState('');
   const [passwordError, setPasswordError] = useState('');
