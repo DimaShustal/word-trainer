@@ -7,7 +7,7 @@ const Stack = forwardRef<HTMLDivElement, StackProps>(
     {
       children,
       direction = 'row',
-      gap = 0,
+      gap,
       alignItems = 'center',
       justifyContent = 'center',
       component,
@@ -20,11 +20,11 @@ const Stack = forwardRef<HTMLDivElement, StackProps>(
       <StackContainer
         {...props}
         direction={direction}
-        gap={gap}
+        gap={gap || 0}
         alignItems={alignItems}
         justifyContent={justifyContent}
         as={component}
-        fullWidth={fullWidth}
+        fullWidth={!!fullWidth}
         ref={ref}
       >
         {children}

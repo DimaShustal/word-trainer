@@ -8,9 +8,9 @@ import { onError } from '@apollo/client/link/error';
 import { POST_MESSAGE } from '../constants/message';
 import { QueryUserWordsArgs, UserWordResponse } from '../__generated__/graphql';
 
-let CLIENT;
-let PERSISTOR;
-let INIT_API_PROMISE;
+let CLIENT: ApolloClient<any>;
+let PERSISTOR: CachePersistor<any>;
+let INIT_API_PROMISE: Promise<void>;
 
 function isCacheUpToDate() {
   const cacheLastUse = localStorage.getItem(LOCAL_STORAGE_KEYS.CACHE_LAST_USE);

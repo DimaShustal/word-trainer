@@ -47,12 +47,12 @@ class Word implements IWord {
     }, []);
   };
 
-  updateLastUse = (): void => {
+  updateLastUse = async (): Promise<void> => {
     try {
       this.lastUse = Date.now();
 
       if (this.store.user.currentLanguageId) {
-        WordApi.updateWords(this.store.user.currentLanguageId, [{ id: this.id, lastUse: this.lastUse }]);
+        await WordApi.updateWords(this.store.user.currentLanguageId, [{ id: this.id, lastUse: this.lastUse }]);
       }
     } catch (error) {
       if (error instanceof ApolloError) {

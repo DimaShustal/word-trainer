@@ -69,7 +69,7 @@ class User {
     window.location.href = ROOT_PATH;
   };
 
-  login = async (name, password): Promise<boolean> => {
+  login = async (name: string, password: string): Promise<boolean> => {
     try {
       const data = await UserApi.login(name, password);
 
@@ -94,7 +94,7 @@ class User {
     }
   };
 
-  createUser = async (name, password): Promise<boolean> => {
+  createUser = async (name: string, password: string): Promise<boolean> => {
     try {
       const data = await UserApi.createUser(name, password);
 

@@ -71,7 +71,7 @@ async function removeWords(
   });
 
   if (data?.removeWords) {
-    const cachedUserWords = client.readQuery({
+    const cachedUserWords: Query | null = client.readQuery({
       query: UserWordsQuery,
       variables: {
         languageId: languageId,
@@ -84,10 +84,10 @@ async function removeWords(
       const newData = {
         userWords: {
           ...cachedUserWords.userWords,
-          edges: cachedUserWords.userWords.edges.filter(edge => !wordIds.includes(edge?.id)),
+          edges: cachedUserWords.userWords?.edges?.filter(edge => !wordIds.includes(edge?.id)),
           pageInfo: {
-            ...cachedUserWords.userWords.pageInfo,
-            totalCount: cachedUserWords.userWords.pageInfo.totalCount - wordIds.length,
+            ...cachedUserWords.userWords?.pageInfo,
+            totalCount: cachedUserWords.userWords?.pageInfo?.totalCount - wordIds.length,
           },
         },
       };
@@ -131,7 +131,9 @@ async function addWordsFromTranslation(
   });
 
   if (data?.addWordsFromTranslation?.length) {
-    const cachedUserWords =
+    const cachedUserWords:
+      | Query
+      | { userWords: { edges: any[]; pageInfo: { hasNextPage: boolean; totalCount: number } } } =
       client.readQuery({
         query: UserWordsQuery,
         variables: {
@@ -144,10 +146,10 @@ async function addWordsFromTranslation(
     const newData = {
       userWords: {
         ...cachedUserWords.userWords,
-        edges: [...data.addWordsFromTranslation, ...cachedUserWords.userWords.edges],
+        edges: [...data.addWordsFromTranslation, ...(cachedUserWords.userWords?.edges || [])],
         pageInfo: {
-          ...cachedUserWords.userWords.pageInfo,
-          totalCount: cachedUserWords.userWords.pageInfo.totalCount + data.addWordsFromTranslation.length,
+          ...cachedUserWords?.userWords?.pageInfo,
+          totalCount: cachedUserWords.userWords?.pageInfo?.totalCount + data.addWordsFromTranslation.length,
         },
       },
     };

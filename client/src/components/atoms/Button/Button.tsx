@@ -184,16 +184,16 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ) => {
     const handleClick = (e: MouseEvent<HTMLElement>) => typeof props.onClick === 'function' && props.onClick(e);
 
-    const Component = useMemo(() => getComponent(type), [type]);
+    const Component = useMemo(() => type && getComponent(type), [type]);
     const sConf = useMemo(() => sizeConfig[type][size] || sizeConfig[type].large, [sizeConfig, size, type]);
     const cConf = useMemo(() => colorConfig[type], [type]);
 
     const contentRenderer = () => {
-      if (['primary', 'secondary'].includes(type) && loading) {
+      if (type && ['primary', 'secondary'].includes(type) && loading) {
         return <LoadingOutlined style={{ fontSize: sConf.fontSize }} />;
       }
 
-      if (['icon'].includes(type) && Icon) {
+      if (type && ['icon'].includes(type) && Icon) {
         return <Icon style={{ fontSize: sConf.fontSize }} />;
       }
 
@@ -203,13 +203,13 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <Component
         onClick={handleClick}
-        active={active}
-        disabled={disabled}
-        loading={loading}
+        active={!!active}
+        disabled={!!disabled}
+        loading={!!loading}
         href={href || ''}
         cConf={cConf}
         sConf={sConf}
-        fullWidth={fullWidth}
+        fullWidth={!!fullWidth}
         ref={ref}
         type={buttonType}
         role="button"

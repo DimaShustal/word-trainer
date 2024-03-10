@@ -31,7 +31,7 @@ const schema = buildSchema(`
   }
   
   type UserWordResponse {
-    edges: [UserWord]!
+    edges: [UserWord!]!
     pageInfo: PageInfo!
   }
   
@@ -42,7 +42,7 @@ const schema = buildSchema(`
   
   type Query {
     user: User
-    languages: [Language]
+    languages: [Language!]!
     userWords(languageId: ID!, offset: Int!, limit: Int!): UserWordResponse
   }
 
