@@ -30,9 +30,8 @@ class Languages {
       if (error instanceof ApolloError) {
         const errorMessages = normalizeYupError(error);
 
-        // TODO add alerts
         errorMessages?.forEach(message => {
-          alert(message);
+          this.store.alerts.addAlert({ message, type: 'error' });
         });
       } else {
         console.error('Languages.fetchLanguages', error);

@@ -49,8 +49,7 @@ class WordList {
       const currentLanguageId = get(this.store.user, 'currentLanguageId');
 
       if (!currentLanguageId) {
-        // TODO add alerts
-        alert('Please select a language.');
+        this.store.alerts.addAlert({ message: 'Выберите язык', type: 'error' });
         return;
       }
 
@@ -67,9 +66,8 @@ class WordList {
       if (error instanceof ApolloError) {
         const errorMessages = normalizeYupError(error);
 
-        // TODO add alerts
         errorMessages?.forEach(message => {
-          alert(message);
+          this.store.alerts.addAlert({ message, type: 'error' });
         });
       } else {
         console.error('WordList.fetchWords', error);
@@ -142,9 +140,8 @@ class WordList {
       if (error instanceof ApolloError) {
         const errorMessages = normalizeYupError(error);
 
-        // TODO add alerts
         errorMessages?.forEach(message => {
-          alert(message);
+          this.store.alerts.addAlert({ message, type: 'error' });
         });
       } else {
         console.error('WordList.removeWords', error);
@@ -164,14 +161,13 @@ class WordList {
         this.addWords(newWords as UserWord[]);
       }
 
-      alert('Words added successfully');
+      this.store.alerts.addAlert({ message: 'Слова успешно добавлены', type: 'success' });
     } catch (error) {
       if (error instanceof ApolloError) {
         const errorMessages = normalizeYupError(error);
 
-        // TODO add alerts
         errorMessages?.forEach(message => {
-          alert(message);
+          this.store.alerts.addAlert({ message, type: 'error' });
         });
       } else {
         console.error('WordList.addWordsFromTranslation', error);

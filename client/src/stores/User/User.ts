@@ -51,9 +51,8 @@ class User {
       if (error instanceof ApolloError) {
         const errorMessages = normalizeYupError(error);
 
-        // TODO add alerts
         errorMessages?.forEach(message => {
-          alert(message);
+          this.store.alerts.addAlert({ message, type: 'error' });
         });
       } else {
         console.error('User.fetchUser', error);
@@ -84,9 +83,8 @@ class User {
       if (error instanceof ApolloError) {
         const errorMessages = normalizeYupError(error);
 
-        // TODO add alerts
         errorMessages?.forEach(message => {
-          alert(message);
+          this.store.alerts.addAlert({ message, type: 'error' });
         });
       } else {
         console.error('User.login', error);
@@ -110,9 +108,8 @@ class User {
       if (error instanceof ApolloError) {
         const errorMessages = normalizeYupError(error);
 
-        // TODO add alerts
         errorMessages?.forEach(message => {
-          alert(message);
+          this.store.alerts.addAlert({ message, type: 'error' });
         });
       } else {
         console.error('User.createUser', error);
