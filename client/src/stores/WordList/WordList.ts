@@ -8,8 +8,8 @@ import { UserWord } from '../../__generated__/graphql';
 import { ApolloError } from '@apollo/client';
 import normalizeYupError from '../../functions/normalizeGraphqlError';
 
-const PER_PAGE = 3;
-const INITIAL_TOTAL_COUNT = 1;
+const PER_PAGE = 50;
+const INITIAL_TOTAL_COUNT = 0;
 
 class WordList {
   words: IWord[] = [];
