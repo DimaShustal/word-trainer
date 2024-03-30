@@ -101,12 +101,17 @@ export type ButtonRootProps = {
   /**
    * styled-component `as` prop
    */
-  as?: React.ElementType;
+  as?: React.ElementType | any;
 
   /**
    * react-router-dom `to` prop
    */
   to?: string;
+
+  bMargin?: number;
+  lMargin?: number;
+  rMargin?: number;
+  tMargin?: number;
 };
 
 export type ButtonProps = ButtonRootProps & React.HTMLAttributes<unknown>;

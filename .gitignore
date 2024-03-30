@@ -15,10 +15,11 @@
 # misc
 .idea
 .DS_Store
-.env.local
-.env.*.local
 /*/.idea
 /*/.DS_Store
+
+.env.local
+.env.*.local
 /*/.env.local
 /*/.env.*.local
 

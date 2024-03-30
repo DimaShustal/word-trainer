@@ -1,15 +1,19 @@
 import { Routes, Route } from 'react-router-dom';
 import {
+  ADD_WORDS_PATH,
   ALL_LANGUAGES_PATH,
   ALL_WORDS_PATH,
+  LOGIN_PATH,
   PHRASE_CONSTRUCTOR_PATH,
+  ROOT_PATH,
   // ALL_TRAININGS_PATH,
-  // ADD_WORDS_PATH,
   // TRAINING_TRANSLATION_PATH,
   // TRAINING_WRITING_PATH,
   // TRAINING_BLITZ_PATH,
   // TRAINING_RESULT_PATH,
 } from 'constants/path';
+import RootPage from './components/pages/RootPage/RootPage';
+import LoginPage from './components/pages/LoginPage/LoginPage';
 import AllLanguagesPage from 'components/pages/AllLanguagesPage/AllLanguagesPage';
 import AllWordsPage from 'components/pages/AllWordsPage/AllWordsPage';
 import PhraseConstructorPage from 'components/pages/PhraseConstructorPage/PhraseConstructorPage';
@@ -20,39 +24,80 @@ import PhraseConstructorPage from 'components/pages/PhraseConstructorPage/Phrase
 // import TrainingBlitzPage from 'components/pages/TrainingBlitzPage/TrainingBlitzPage';
 // import TrainingResultPage from 'components/pages/TrainingResultPage/TrainingResultPage';
 import AppLayout from 'components/organisms/AppLayout/AppLayout';
-import AppStore from 'stores/AppStore';
-import AppContext from 'contexts/AppContext';
 import { useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import Loader from './components/atoms/Loader/Loader';
+import { useAppContext } from './contexts/AppContext';
+import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev';
+import useLogoutListener from './functions/useLogoutListener';
+import AuthorizedRoute from './components/organisms/AuthorizedRoute/AuthorizedRoute';
+import AddWordsPage from './components/pages/AddWordsPage/AddWordsPage';
 
-const store = new AppStore();
+if (process.env.NODE_ENV !== 'production') {
+  loadDevMessages();
+  loadErrorMessages();
+}
 
 function App() {
-  useEffect(() => {
-    if (!store.user.isLoaded) store.user.fetchUser();
-  }, [store.wordList.isLoaded]);
+  const { store } = useAppContext();
 
-  if (!store.user.isLoaded) {
+  useEffect(() => {
+    if (store.user.isLogged) {
+      if (!store.user.isLoaded) store.user.fetchUser();
+      if (!store.languages.isLoaded) store.languages.fetchLanguages();
+    }
+  }, [store.user.isLogged]);
+
+  useLogoutListener(store);
+
+  if (store.user.isLogged && !store.user.isLoaded) {
     return <Loader />;
   }
 
   return (
-    <AppContext.Provider value={{ store }}>
-      <AppLayout>
-        <Routes>
-          <Route path={ALL_LANGUAGES_PATH} element={<AllLanguagesPage />} />
-          <Route path={ALL_WORDS_PATH} element={<AllWordsPage />} />
-          <Route path={PHRASE_CONSTRUCTOR_PATH} element={<PhraseConstructorPage />} />
-          {/*<Route path={ALL_TRAININGS_PATH} element={<AllTrainingsPage />} />*/}
-          {/*<Route path={ADD_WORDS_PATH} element={<AddWordPage />} />*/}
-          {/*<Route path={TRAINING_TRANSLATION_PATH} element={<TrainingTranslationPage />} />*/}
-          {/*<Route path={TRAINING_WRITING_PATH} element={<TrainingWritingPage />} />*/}
-          {/*<Route path={TRAINING_BLITZ_PATH} element={<TrainingBlitzPage />} />*/}
-          {/*<Route path={TRAINING_RESULT_PATH} element={<TrainingResultPage />} />*/}
-        </Routes>
-      </AppLayout>
-    </AppContext.Provider>
+    <AppLayout>
+      <Routes>
+        <Route path={ROOT_PATH} element={<RootPage />} />
+        <Route path={LOGIN_PATH} element={<LoginPage />} />
+        <Route
+          path={ALL_LANGUAGES_PATH}
+          element={
+            <AuthorizedRoute>
+              <AllLanguagesPage />
+            </AuthorizedRoute>
+          }
+        />
+        <Route
+          path={ALL_WORDS_PATH}
+          element={
+            <AuthorizedRoute>
+              <AllWordsPage />
+            </AuthorizedRoute>
+          }
+        />
+        <Route
+          path={PHRASE_CONSTRUCTOR_PATH}
+          element={
+            <AuthorizedRoute>
+              <PhraseConstructorPage />
+            </AuthorizedRoute>
+          }
+        />
+        <Route
+          path={ADD_WORDS_PATH}
+          element={
+            <AuthorizedRoute>
+              <AddWordsPage />
+            </AuthorizedRoute>
+          }
+        />
+        {/*<Route path={ALL_TRAININGS_PATH} element={<AllTrainingsPage />} />*/}
+        {/*<Route path={TRAINING_TRANSLATION_PATH} element={<TrainingTranslationPage />} />*/}
+        {/*<Route path={TRAINING_WRITING_PATH} element={<TrainingWritingPage />} />*/}
+        {/*<Route path={TRAINING_BLITZ_PATH} element={<TrainingBlitzPage />} />*/}
+        {/*<Route path={TRAINING_RESULT_PATH} element={<TrainingResultPage />} />*/}
+      </Routes>
+    </AppLayout>
   );
 }
 
