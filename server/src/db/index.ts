@@ -1,4 +1,7 @@
 import { ILanguage, IUser } from '../types/index.js';
+import Language from './models/Language.js';
+import Word from './models/Word.js';
+import User from './models/User.js';
 
 const usersDb: IUser[] = [
   {
@@ -121,6 +124,10 @@ const languagesDb: ILanguage[] = [
 const db = {
   users: usersDb,
   languages: languagesDb,
+
+  Language,
+  Word,
+  User,
 };
 
 export default db;
