@@ -10,11 +10,6 @@ async function fetchUser(): Promise<Query['user']> {
         user {
           id
           name
-          languages {
-            id
-            name
-            code
-          }
         }
       }
     `,
