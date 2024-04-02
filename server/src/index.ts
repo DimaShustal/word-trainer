@@ -3,9 +3,9 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import { createHandler } from 'graphql-http/lib/use/express';
-import { parseAuthorizationHeader } from './app/functions/authorization.js';
-import schema from './app/graphql/schema.js';
-import rootValue from './app/graphql/rootValue/index.js';
+import { parseAuthorizationHeader } from './functions/authorization.js';
+import schema from './graphql/schema.js';
+import rootValue from './graphql/rootValue/index.js';
 
 const PORT = 4000;
 const app = express();

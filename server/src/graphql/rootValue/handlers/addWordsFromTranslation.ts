@@ -1,8 +1,7 @@
-import { IContext } from '../../../../types/index.js';
 import getUserFromContext from '../../../functions/getUserFromContext.js';
 import translateText from '../../../functions/translateText.js';
-import db from '../../../../db/index.js';
-import { IUserWord, IWord } from '../../../../db/types.js';
+import db from '../../../db/index.js';
+import { IContext, IUserWord, IWord } from '../../../types/index.js';
 import getNormalizedWord from '../../../functions/getNormalizedWord.js';
 
 interface IAddWordsArgs {

@@ -1,7 +1,6 @@
-import { IContext } from '../../../../types/index.js';
-import { IUserWord } from '../../../../db/types.js';
+import { IContext, IUserWord } from '../../../types/index.js';
 import getUserFromContext from '../../../functions/getUserFromContext.js';
-import db from '../../../../db/index.js';
+import db from '../../../db/index.js';
 
 interface IUpdateWord {
   id: string;

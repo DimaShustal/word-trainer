@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { IWord } from '../types.js';
+import { IWord } from '../../types/index.js';
 
 // TODO add index to languageId and translation (for addWordsFromTranslation.ts)
 const wordSchema: mongoose.Schema<IWord> = new mongoose.Schema({

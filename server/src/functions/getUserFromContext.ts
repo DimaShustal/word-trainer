@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
-import { IContext } from '../../types/index.js';
-import db from '../../db/index.js';
-import { IUser } from '../../db/types.js';
+import db from '../db/index.js';
+import { IContext, IUser } from '../types/index.js';
 
 async function getUserFromContext(context: IContext, projection?: mongoose.ProjectionType<IUser>): Promise<IUser> {
   if (!context?.user?.userId) {

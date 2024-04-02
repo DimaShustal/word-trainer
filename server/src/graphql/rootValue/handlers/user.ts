@@ -1,6 +1,5 @@
-import { IContext } from '../../../../types/index.js';
 import getUserFromContext from '../../../functions/getUserFromContext.js';
-import { IUser } from '../../../../db/types.js';
+import { IContext, IUser } from '../../../types/index.js';
 
 function user(_: never, context: IContext): Promise<IUser> {
   return getUserFromContext(context, { id: 1, name: 1 });

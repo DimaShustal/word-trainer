@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { IUser, IUserWord } from '../types.js';
+import { IUser, IUserWord } from '../../types/index.js';
 
 const userWordSchema: mongoose.Schema<IUserWord> = new mongoose.Schema({
   wordId: { type: mongoose.Schema.Types.ObjectId, ref: 'Word', required: true },

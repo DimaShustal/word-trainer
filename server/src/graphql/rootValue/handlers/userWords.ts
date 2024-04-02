@@ -1,12 +1,18 @@
-import { IContext } from '../../../../types/index.js';
 import getUserFromContext from '../../../functions/getUserFromContext.js';
-import { IUserWordsResponse } from '../types.js';
-import { IUserWord } from '../../../../db/types.js';
+import { IContext, IUserWord } from '../../../types/index.js';
 
 interface IUserWordsArgs {
   languageId: string;
   offset: number;
   limit: number;
+}
+
+interface IUserWordsResponse {
+  edges: IUserWord[];
+  pageInfo: {
+    totalCount: number;
+    hasNextPage: boolean;
+  };
 }
 
 async function userWords(args: IUserWordsArgs, context: IContext): Promise<IUserWordsResponse> {

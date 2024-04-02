@@ -1,6 +1,5 @@
-import { IContext } from '../../../../types/index.js';
 import getUserFromContext from '../../../functions/getUserFromContext.js';
-import { IUserWord } from '../../../../db/types.js';
+import { IContext, IUserWord } from '../../../types/index.js';
 
 interface IRemoveWordsArgs {
   languageId: string;
