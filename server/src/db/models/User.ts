@@ -22,13 +22,15 @@ userWordSchema.set('toObject', {
   virtuals: true,
 });
 
-// TODO add index to name (for login.ts)
 const userSchema: mongoose.Schema<IUser> = new mongoose.Schema({
   name: { type: String, required: true, unique: true, minlength: 6, maxLength: 30 },
   passwordHash: { type: String, required: true },
   salt: { type: String, required: true },
   words: [userWordSchema],
 });
+
+// TODO test index for login.ts
+// userSchema.index({ name: 1 });
 
 userSchema.virtual('id').get(function () {
   return this._id.toHexString();

@@ -1,12 +1,17 @@
 import mongoose from 'mongoose';
 import { IWord } from '../../types/index.js';
 
-// TODO add index to languageId and translation (for addWordsFromTranslation.ts)
 const wordSchema: mongoose.Schema<IWord> = new mongoose.Schema({
   languageId: { type: mongoose.Schema.Types.ObjectId, ref: 'Language', required: true },
   word: { type: String, required: true },
   translation: { type: String, required: true },
 });
+
+// TODO test index for addWordsFromTranslation.ts
+// wordSchema.index({ languageId: 1 });
+// wordSchema.index({ translation: 1 });
+
+// wordSchema.index({ languageId: 1, translation: 1 });
 
 wordSchema.virtual('id').get(function () {
   return this._id.toHexString();

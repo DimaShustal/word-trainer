@@ -50,7 +50,6 @@ async function addWordsFromTranslation(args: IAddWordsArgs, context: IContext): 
     if (userWordIndex === -1) {
       const userWord = {
         id: word.id,
-        // TODO replace wordId with id
         wordId: word.id,
         languageId: language.id,
         lastUse: new Date(0),
