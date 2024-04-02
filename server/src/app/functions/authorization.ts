@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
-import { IJwtData, IUser } from '../../types/index.js';
+import { IJwtData } from '../../types/index.js';
+import { IUser } from '../../db/types.js';
 
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY as string;
 

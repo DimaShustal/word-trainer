@@ -1,25 +1,37 @@
-import { IContext, ILanguage, IUserLanguage, IUserWord } from '../../../../types/index.js';
+import { IContext } from '../../../../types/index.js';
+import { IUserWord } from '../../../../db/types.js';
 import getUserFromContext from '../../../functions/getUserFromContext.js';
-import { IUserWordEdge } from '../types.js';
+import db from '../../../../db/index.js';
 
-async function updateWords({ languageId, words }: { languageId: string; words: IUserWord[] }, context: IContext) {
-  const user = getUserFromContext(context);
-  const language = context.db.languages.find((language: ILanguage) => language.id === languageId);
+interface IUpdateWord {
+  id: string;
+  lastUse: number;
+}
+
+interface IUpdateWordsArgs {
+  languageId: string;
+  words: IUpdateWord[];
+}
+
+async function updateWords(args: IUpdateWordsArgs, context: IContext): Promise<boolean> {
+  const { languageId, words } = args;
+  const user = await getUserFromContext(context, { words: 1 });
+  const language = await db.Language.findById(languageId);
 
   if (!language) {
-    throw new Error('Language not found');
+    throw new Error('Language not supported');
   }
 
-  let userLanguage = user.languages.find((language: IUserLanguage) => language.id === languageId);
+  words.forEach((word: IUpdateWord) => {
+    const wordIndexToUpdate = user.words.findIndex((userWord: IUserWord) => userWord.id.toString() === word.id);
 
-  if (!userLanguage) {
-    userLanguage = { id: languageId, words: [] };
-  }
-
-  words.forEach((word: IUserWordEdge) => {
-    userLanguage.words = userLanguage.words.filter((userWord: IUserWord) => userWord.id !== word.id);
-    userLanguage.words.push(word);
+    if (wordIndexToUpdate !== -1) {
+      user.words[wordIndexToUpdate].lastUse = new Date(word.lastUse);
+      user.markModified('words');
+    }
   });
+
+  await user.save();
 
   return true;
 }

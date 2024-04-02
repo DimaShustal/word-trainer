@@ -1,7 +1,8 @@
-import { IContext, ILanguage } from '../../../../types/index.js';
+import db from '../../../../db/index.js';
+import { ILanguage } from '../../../../db/types.js';
 
-async function languages(_: never, context: IContext): Promise<ILanguage[]> {
-  return context.db.languages;
+function languages(): Promise<ILanguage[]> {
+  return db.Language.find().sort({ name: 1 });
 }
 
 export default languages;

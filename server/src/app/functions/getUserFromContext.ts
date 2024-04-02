@@ -1,11 +1,14 @@
-import { IContext, IUser } from '../../types/index.js';
+import mongoose from 'mongoose';
+import { IContext } from '../../types/index.js';
+import db from '../../db/index.js';
+import { IUser } from '../../db/types.js';
 
-function getUserFromContext(context: IContext) {
+async function getUserFromContext(context: IContext, projection?: mongoose.ProjectionType<IUser>): Promise<IUser> {
   if (!context?.user?.userId) {
     throw new Error('User not found');
   }
 
-  const user = context.db.users.find((user: IUser) => user.id === context?.user?.userId);
+  const user = await db.User.findById(context.user.userId, projection || null);
 
   if (!user) {
     throw new Error('User not found');

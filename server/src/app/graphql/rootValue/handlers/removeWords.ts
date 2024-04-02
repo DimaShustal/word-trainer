@@ -1,13 +1,20 @@
-import { IContext, IUserLanguage, IUserWord } from '../../../../types/index.js';
+import { IContext } from '../../../../types/index.js';
 import getUserFromContext from '../../../functions/getUserFromContext.js';
+import { IUserWord } from '../../../../db/types.js';
 
-async function removeWords({ languageId, wordIds }: { languageId: string; wordIds: string[] }, context: IContext) {
-  const user = getUserFromContext(context);
-  const userLanguage = user.languages.find((language: IUserLanguage) => language.id === languageId);
+interface IRemoveWordsArgs {
+  languageId: string;
+  wordIds: string[];
+}
 
-  if (userLanguage) {
-    userLanguage.words = userLanguage.words.filter(({ id }: IUserWord) => !wordIds.includes(id));
-  }
+async function removeWords(args: IRemoveWordsArgs, context: IContext) {
+  const { wordIds } = args;
+  const user = await getUserFromContext(context, { words: 1 });
+
+  user.words = user.words.filter((word: IUserWord) => !wordIds.includes(word.id.toString()));
+  user.markModified('words');
+
+  await user.save();
 
   return true;
 }

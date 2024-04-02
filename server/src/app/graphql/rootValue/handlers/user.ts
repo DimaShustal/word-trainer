@@ -1,14 +1,9 @@
-import { IContext, IUserLanguage } from '../../../../types/index.js';
+import { IContext } from '../../../../types/index.js';
 import getUserFromContext from '../../../functions/getUserFromContext.js';
-import { IUserResponse } from '../types.js';
+import { IUser } from '../../../../db/types.js';
 
-async function user(_: never, context: IContext): Promise<IUserResponse | undefined> {
-  const user = getUserFromContext(context);
-  const languages = user?.languages?.map((language: IUserLanguage) =>
-    context.db.languages.find(({ id }) => id === language.id),
-  );
-
-  return { ...user, languages };
+function user(_: never, context: IContext): Promise<IUser> {
+  return getUserFromContext(context, { id: 1, name: 1 });
 }
 
 export default user;

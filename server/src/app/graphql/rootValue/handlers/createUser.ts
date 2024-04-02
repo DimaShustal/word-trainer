@@ -1,13 +1,13 @@
 import bcrypt from 'bcrypt';
-import { IContext, IUser } from '../../../../types/index.js';
 import { generateToken } from '../../../functions/authorization.js';
 import { IUserCredentials } from '../types.js';
 import loginValidationSchema from '../../../constants/loginValidationSchema.js';
+import db from '../../../../db/index.js';
 
-async function createUser({ name, password }: IUserCredentials, context: IContext): Promise<string> {
+async function createUser({ name, password }: IUserCredentials): Promise<string> {
   await loginValidationSchema.validate({ name, password }, { abortEarly: false });
 
-  const existingUser = context.db.users.find(user => user.name === name);
+  const existingUser = await db.User.findOne({ name }, { id: 1, name: 1 });
 
   if (existingUser) {
     throw new Error('Username already exists');
@@ -15,9 +15,9 @@ async function createUser({ name, password }: IUserCredentials, context: IContex
 
   const salt = await bcrypt.genSalt(10);
   const passwordHash = await bcrypt.hash(password, salt);
-  const newUser: IUser = { id: String(context.db.users.length + 1), name, passwordHash, salt, languages: [] };
+  const newUser = new db.User({ name, passwordHash, salt, words: [] });
 
-  context.db.users.push(newUser);
+  await newUser.save();
 
   return generateToken(newUser);
 }

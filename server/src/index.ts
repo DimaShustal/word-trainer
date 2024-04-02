@@ -4,7 +4,6 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import { createHandler } from 'graphql-http/lib/use/express';
 import { parseAuthorizationHeader } from './app/functions/authorization.js';
-import db from './db/index.js';
 import schema from './app/graphql/schema.js';
 import rootValue from './app/graphql/rootValue/index.js';
 
@@ -25,7 +24,7 @@ app.all(
     context: req => {
       const user = parseAuthorizationHeader(req);
 
-      return { user, db };
+      return { user };
     },
   }),
 );
