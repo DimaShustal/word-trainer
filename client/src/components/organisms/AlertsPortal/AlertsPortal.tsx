@@ -3,6 +3,7 @@ import { useAppContext } from '../../../contexts/AppContext';
 import Alert from '../../molecules/Alert/Alert';
 import { AlertsContainer } from './AlertsPortal.style';
 
+// TODO change alert order, new alerts should be on top
 function AlertsPortal() {
   const { store } = useAppContext();
 
