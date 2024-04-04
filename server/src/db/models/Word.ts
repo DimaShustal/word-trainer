@@ -7,11 +7,7 @@ const wordSchema: mongoose.Schema<IWord> = new mongoose.Schema({
   translation: { type: String, required: true },
 });
 
-// TODO test index for addWordsFromTranslation.ts
-// wordSchema.index({ languageId: 1 });
-// wordSchema.index({ translation: 1 });
-
-// wordSchema.index({ languageId: 1, translation: 1 });
+wordSchema.index({ languageId: 1, translation: 1 });
 
 wordSchema.virtual('id').get(function () {
   return this._id.toHexString();

@@ -29,8 +29,7 @@ const userSchema: mongoose.Schema<IUser> = new mongoose.Schema({
   words: [userWordSchema],
 });
 
-// TODO test index for login.ts
-// userSchema.index({ name: 1 });
+userSchema.index({ name: 1 });
 
 userSchema.virtual('id').get(function () {
   return this._id.toHexString();
