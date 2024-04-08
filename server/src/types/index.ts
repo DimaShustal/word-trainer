@@ -1,13 +1,13 @@
 import mongoose from 'mongoose';
 
-export interface ILanguage extends mongoose.Document {
+export interface ILanguage {
   id: mongoose.Types.ObjectId;
   name: string;
   code: string;
   translationCode: string;
 }
 
-export interface IWord extends mongoose.Document {
+export interface IWord {
   id: mongoose.Types.ObjectId;
   languageId: mongoose.Types.ObjectId;
   word: string;
@@ -24,7 +24,7 @@ export interface IUserWord {
   translation: string;
 }
 
-export interface IUser extends mongoose.Document {
+export interface IUser {
   id: mongoose.Types.ObjectId;
   name: string;
   passwordHash: string;

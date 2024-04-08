@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { IWord } from '../../types/index.js';
 
-const wordSchema: mongoose.Schema<IWord> = new mongoose.Schema({
+const wordSchema = new mongoose.Schema<IWord>({
   languageId: { type: mongoose.Schema.Types.ObjectId, ref: 'Language', required: true },
   word: { type: String, required: true },
   translation: { type: String, required: true },
@@ -21,6 +21,6 @@ wordSchema.set('toObject', {
   virtuals: true,
 });
 
-const Word: mongoose.Model<IWord> = mongoose.model('Word', wordSchema);
+const Word = mongoose.model<IWord>('Word', wordSchema);
 
 export default Word;

@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { ILanguage } from '../../types/index.js';
 
-const languageSchema: mongoose.Schema<ILanguage> = new mongoose.Schema({
+const languageSchema = new mongoose.Schema<ILanguage>({
   name: { type: String, required: true, unique: true },
   code: { type: String, required: true },
   translationCode: { type: String, required: true },
@@ -19,6 +19,6 @@ languageSchema.set('toObject', {
   virtuals: true,
 });
 
-const Language: mongoose.Model<ILanguage> = mongoose.model('Language', languageSchema);
+const Language = mongoose.model<ILanguage>('Language', languageSchema);
 
 export default Language;
