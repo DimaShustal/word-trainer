@@ -15,31 +15,30 @@ const schema = buildSchema(`
   type User implements Node {
     id: ID!
     name: String!
-    languages: [Language]!
   }
-  
+
   type UserWord implements Node {
     id: ID!
     word: String!
     translation: String!
     lastUse: Float
   }
-  
+
   type PageInfo {
     totalCount: Int!
     hasNextPage: Boolean!
   }
-  
+
   type UserWordResponse {
     edges: [UserWord!]!
     pageInfo: PageInfo!
   }
-  
+
   input UserWordInput {
     id: ID!
     lastUse: Float!
   }
-  
+
   type Query {
     user: User
     languages: [Language!]!

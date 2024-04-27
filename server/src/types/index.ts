@@ -1,19 +1,47 @@
-import { IUser, IUserLanguage, IUserWord } from './user';
-import { ILanguageWord, ILanguage } from './language';
+import mongoose from 'mongoose';
 
-export { IUser, IUserLanguage, IUserWord, ILanguageWord, ILanguage };
+export interface ILanguage {
+  id: mongoose.Types.ObjectId;
+  name: string;
+  code: string;
+  translationCode: string;
+}
+
+export interface IWord {
+  id: mongoose.Types.ObjectId;
+  languageId: mongoose.Types.ObjectId;
+  word: string;
+  translation: string;
+}
+
+export interface IUserWord {
+  id: mongoose.Types.ObjectId;
+  wordId: mongoose.Types.ObjectId;
+  languageId: mongoose.Types.ObjectId;
+  lastUse: Date;
+  createdAt: Date;
+  word: string;
+  translation: string;
+}
+
+export interface IUser {
+  id: mongoose.Types.ObjectId;
+  name: string;
+  passwordHash: string;
+  salt: string;
+  words: IUserWord[];
+}
 
 export interface IJwtData {
   name: string;
   userId: string;
 }
 
-interface IDb {
-  users: IUser[];
-  languages: ILanguage[];
-}
-
 export interface IContext {
   user?: IJwtData;
-  db: IDb;
+}
+
+export interface IUserCredentials {
+  name: string;
+  password: string;
 }

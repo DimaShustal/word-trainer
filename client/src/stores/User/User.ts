@@ -16,7 +16,6 @@ class User {
 
   id: UserGraphql['id'] | undefined;
   name: UserGraphql['name'] | undefined;
-  languages: UserGraphql['languages'] | undefined;
 
   constructor(private store: AppStore) {
     makeAutoObservable(this);
@@ -40,10 +39,8 @@ class User {
       if (data) {
         this.id = data.id;
         this.name = data.name;
-        this.languages = data.languages;
 
-        this.currentLanguageId =
-          localStorage.getItem(LOCAL_STORAGE_KEYS.CURRENT_LANGUAGE_ID) || data.languages?.[0]?.id;
+        this.currentLanguageId = localStorage.getItem(LOCAL_STORAGE_KEYS.CURRENT_LANGUAGE_ID);
         this.isLoaded = true;
         this.isLogged = true;
       }

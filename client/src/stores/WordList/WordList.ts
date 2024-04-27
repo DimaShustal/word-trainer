@@ -62,6 +62,7 @@ class WordList {
 
       if (!currentLanguageId) {
         this.store.alerts.showAlert({ message: 'Выберите язык', type: 'error' });
+        this.isLoading = false;
         return;
       }
 
