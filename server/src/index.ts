@@ -7,6 +7,8 @@ import { parseAuthorizationHeader } from './functions/authorization.js';
 import schema from './graphql/schema.js';
 import rootValue from './graphql/rootValue/index.js';
 
+// test code
+
 const PORT = 4000;
 const app = express();
 
