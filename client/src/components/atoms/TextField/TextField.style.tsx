@@ -2,7 +2,11 @@ import styled from 'styled-components';
 import { pixelsToRems } from '../../../functions/pixelsToRems';
 import { getColor } from '../../../functions/colors';
 
-export const Input = styled.input`
+interface InputProps {
+  $hasError: boolean;
+}
+
+export const Input = styled.input<InputProps>`
   all: unset;
   box-sizing: inherit;
   width: 100%;

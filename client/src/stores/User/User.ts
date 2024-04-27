@@ -40,7 +40,7 @@ class User {
         this.id = data.id;
         this.name = data.name;
 
-        this.currentLanguageId = localStorage.getItem(LOCAL_STORAGE_KEYS.CURRENT_LANGUAGE_ID);
+        this.currentLanguageId = localStorage.getItem(LOCAL_STORAGE_KEYS.CURRENT_LANGUAGE_ID) || undefined;
         this.isLoaded = true;
         this.isLogged = true;
       }

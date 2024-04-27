@@ -81,13 +81,14 @@ async function removeWords(
     });
 
     if (cachedUserWords) {
+      const cachedTotalCount = cachedUserWords.userWords?.pageInfo?.totalCount || 0;
       const newData = {
         userWords: {
           ...cachedUserWords.userWords,
           edges: cachedUserWords.userWords?.edges?.filter(edge => !wordIds.includes(edge?.id)),
           pageInfo: {
             ...cachedUserWords.userWords?.pageInfo,
-            totalCount: cachedUserWords.userWords?.pageInfo?.totalCount - wordIds.length,
+            totalCount: Math.max(0, cachedTotalCount - wordIds.length),
           },
         },
       };
@@ -97,7 +98,7 @@ async function removeWords(
         variables: {
           languageId: languageId,
           offset: 0,
-          limit: newData.userWords.edges.length,
+          limit: newData?.userWords?.edges?.length,
         },
         data: newData,
       });
@@ -143,13 +144,14 @@ async function addWordsFromTranslation(
         },
       }) || DEFAULT_CACHE_USER_WORDS;
 
+    const cachedTotalCount = cachedUserWords.userWords?.pageInfo?.totalCount || 0;
     const newData = {
       userWords: {
         ...cachedUserWords.userWords,
         edges: [...data.addWordsFromTranslation, ...(cachedUserWords.userWords?.edges || [])],
         pageInfo: {
           ...cachedUserWords?.userWords?.pageInfo,
-          totalCount: cachedUserWords.userWords?.pageInfo?.totalCount + data.addWordsFromTranslation.length,
+          totalCount: cachedTotalCount + data.addWordsFromTranslation.length,
         },
       },
     };

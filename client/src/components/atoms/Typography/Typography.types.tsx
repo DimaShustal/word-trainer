@@ -1,7 +1,7 @@
-import React from 'react';
+import { ComponentType, CSSProperties, ReactNode, AllHTMLAttributes } from 'react';
 import { TColor } from '../../../functions/colors';
 
-type AsComponent<T = any> = React.ComponentType<T> | string;
+type AsComponent<T = any> = ComponentType<T> | string;
 
 export type TTypographyVariant =
   | 'h1'
@@ -15,11 +15,11 @@ export type TTypographyVariant =
   | 'paragraphSmall';
 
 export type TypographyRootProps = {
-  children: React.ReactNode;
-  align?: React.CSSProperties['textAlign'];
-  fontWeight?: React.CSSProperties['fontWeight'];
-  textTransform?: React.CSSProperties['textTransform'];
-  textDecoration?: React.CSSProperties['textDecoration'];
+  children: ReactNode;
+  align?: CSSProperties['textAlign'];
+  fontWeight?: CSSProperties['fontWeight'];
+  textTransform?: CSSProperties['textTransform'];
+  textDecoration?: CSSProperties['textDecoration'];
   bMargin?: number;
   lMargin?: number;
   rMargin?: number;
@@ -32,4 +32,4 @@ export type TypographyRootProps = {
 
 export type TypographyProps = TypographyRootProps & {
   component?: AsComponent;
-} & React.HTMLAttributes<unknown>;
+} & AllHTMLAttributes<unknown>;

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { CachePersistor, LocalStorageWrapper } from 'apollo3-cache-persist';

@@ -1,8 +1,8 @@
+import { ChangeEvent, useEffect, useState } from 'react';
 import { Container } from './AddWordsPage.style';
 import TextField from '../../atoms/TextField/TextField';
 import Button from '../../atoms/Button';
 import { useAppContext } from '../../../contexts/AppContext';
-import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import * as yup from 'yup';
 import normalizeYupError from '../../../functions/normalizeYupError';
@@ -30,7 +30,7 @@ const AddWordsPage = () => {
   const [translationsError, setTranslationsError] = useState('');
   const [separatorError, setSeparatorError] = useState('');
 
-  const inputHandler = e => {
+  const inputHandler = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.name === 'translations') {
       setTranslations(e.target.value);
       return;
