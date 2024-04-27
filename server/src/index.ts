@@ -11,7 +11,9 @@ const PORT = 4000;
 const app = express();
 
 mongoose
-  .connect('mongodb://localhost:27017/mydatabase')
+  .connect(
+    `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@word-trainer.izhine7.mongodb.net/app?retryWrites=true&w=majority&appName=word-trainer`,
+  )
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));
 
