@@ -1,0 +1,39 @@
+name: Check changes in client folder
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'client/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'client/**'
+
+defaults:
+  run:
+    shell: bash
+    working-directory: ./client
+
+
+jobs:
+  test:
+    name: 'Run unit tests'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        name: 'Checkout repository'
+
+      - name: 'Install Dependencies'
+        run: yarn install
+
+      - name: 'Run Tests'
+        run: yarn test
+
+      - name: 'Run Type Check'
+        run: yarn type-check
+
+      - name: 'Run Lint Check'
+        run: yarn lint-check
