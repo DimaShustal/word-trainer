@@ -10,7 +10,8 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "codegen": "graphql-codegen",
-    "type-check": "tsc"
+    "type-check": "tsc",
+    "lint-check": "eslint src --ext .ts,.tsx"
   },
   "browserslist": {
     "production": [
