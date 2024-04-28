@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import * as yup from 'yup';
 import { observer } from 'mobx-react-lite';
 import { useAppContext } from '../../../contexts/AppContext';
@@ -32,7 +32,7 @@ function LoginPage() {
   const [nameError, setNameError] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
-  const inputHandler = e => {
+  const inputHandler = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.name === 'name') {
       setName(e.target.value);
       return;
@@ -44,7 +44,7 @@ function LoginPage() {
     }
   };
 
-  const authHandler = async callback => {
+  const authHandler = async (callback: (name: string, password: string) => Promise<boolean>) => {
     try {
       setNameError('');
       setPasswordError('');

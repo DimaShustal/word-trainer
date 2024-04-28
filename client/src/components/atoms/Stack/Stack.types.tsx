@@ -1,6 +1,6 @@
-import React, { CSSProperties } from 'react';
+import { ComponentType, CSSProperties, HTMLAttributes, ReactNode } from 'react';
 
-type AsComponent<T = any> = React.ComponentType<T> | string;
+type AsComponent<T = any> = ComponentType<T> | string;
 
 export interface StackBaseProps {
   direction?: CSSProperties['flexDirection'];
@@ -11,6 +11,6 @@ export interface StackBaseProps {
 }
 
 export type StackProps = StackBaseProps & {
-  children: React.ReactNode;
+  children: ReactNode;
   component?: AsComponent;
-} & React.HTMLAttributes<HTMLDivElement>;
+} & HTMLAttributes<HTMLDivElement>;

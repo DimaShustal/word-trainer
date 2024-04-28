@@ -1,4 +1,4 @@
-import React from 'react';
+import { ButtonHTMLAttributes, ElementType, HTMLAttributes, ReactNode } from 'react';
 import Icon from '@ant-design/icons/lib/components/Icon';
 
 export type ButtonColor = {
@@ -32,6 +32,11 @@ export type StyledButtonProps = {
   cConf: ButtonColorStates;
   sConf: ButtonSize | Partial<ButtonSize>;
   href: string;
+
+  bMargin?: number;
+  lMargin?: number;
+  rMargin?: number;
+  tMargin?: number;
 };
 
 export type ButtonVariants<T = unknown> = {
@@ -51,12 +56,12 @@ export type ButtonRootProps = {
   /**
    * Way to pass `type` to the button element
    */
-  buttonType?: React.ButtonHTMLAttributes<HTMLButtonElement>['type'];
+  buttonType?: ButtonHTMLAttributes<HTMLButtonElement>['type'];
 
   /**
    * The content of the button.
    */
-  children?: React.ReactNode;
+  children?: ReactNode;
 
   /**
    * Controls disabled state
@@ -101,7 +106,7 @@ export type ButtonRootProps = {
   /**
    * styled-component `as` prop
    */
-  as?: React.ElementType | any;
+  as?: ElementType | any;
 
   /**
    * react-router-dom `to` prop
@@ -114,4 +119,4 @@ export type ButtonRootProps = {
   tMargin?: number;
 };
 
-export type ButtonProps = ButtonRootProps & React.HTMLAttributes<unknown>;
+export type ButtonProps = ButtonRootProps & HTMLAttributes<unknown>;

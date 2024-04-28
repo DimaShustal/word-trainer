@@ -49,7 +49,7 @@ class WordList {
   addWords = (data: UserWord[]): void => {
     if (!data.length) return;
 
-    this.words = [...this.words, ...data.map(word => new Word(this.store, word))];
+    this.words = [...this.words, ...data.map(word => new Word(this.store, word) as IWord)];
   };
 
   fetchWords = async (): Promise<void> => {

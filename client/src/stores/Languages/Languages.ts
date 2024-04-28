@@ -3,10 +3,10 @@ import AppStore from '../AppStore';
 import { ApolloError } from '@apollo/client';
 import normalizeYupError from '../../functions/normalizeGraphqlError';
 import LanguagesApi from './LanguagesApi';
-import { Language as LanguageGraphql, Maybe } from '../../__generated__/graphql';
+import { Language as LanguageGraphql } from '../../__generated__/graphql';
 
 class Languages {
-  list: Array<Maybe<LanguageGraphql>> | undefined;
+  list: Array<LanguageGraphql> | undefined;
   isLoaded: boolean = false;
   isLoading: boolean = false;
 

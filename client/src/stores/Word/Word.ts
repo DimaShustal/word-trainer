@@ -21,10 +21,10 @@ class Word implements IWord {
     makeAutoObservable(this);
 
     this.id = word.id;
-    this.lastUse = word.lastUse;
+    this.lastUse = word.lastUse ? word.lastUse : 0;
     this.translation = word.translation;
     this.word = word.word;
-    this.learned = word.lastUse && Date.now() - word.lastUse < END_TIME_OF_LEARNED_STATUS;
+    this.learned = !!(word.lastUse && Date.now() - word.lastUse < END_TIME_OF_LEARNED_STATUS);
     this.isPhrase = this.word.split(' ').length > 1 && this.translation.split(' ').length > 1;
   }
 

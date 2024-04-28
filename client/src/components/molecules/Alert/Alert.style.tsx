@@ -21,11 +21,17 @@ const SuccessStyles = css`
   color: ${getColor('primary2')};
 `;
 
+type AlertContainerProps = {
+  $isError: boolean;
+  $isInfo: boolean;
+  $isSuccess: boolean;
+};
+
 export const AlertContainer = styled(Stack).attrs({
-  gap: pixelsToRems(5),
+  gap: 5,
   direction: 'row',
   justifyContent: 'space-between',
-})`
+})<AlertContainerProps>`
   width: ${pixelsToRems(400)};
   margin-bottom: ${pixelsToRems(10)};
   padding: ${pixelsToRems(10)};

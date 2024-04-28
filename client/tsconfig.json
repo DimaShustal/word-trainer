@@ -16,8 +16,8 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "useDefineForClassFields": true,
-    "excludeDirectories": ["node_modules", "build", "public", "src/__generated__"],
+    "useDefineForClassFields": true
   },
+  "exclude": ["node_modules", "build", "public", "src/__generated__"],
   "include": ["src"]
 }

@@ -1,4 +1,4 @@
-import { ChangeEvent, useId } from 'react';
+import { ChangeEvent, InputHTMLAttributes, useId } from 'react';
 import Typography from '../Typography';
 import Stack from '../Stack';
 import { Input } from './TextField.style';
@@ -9,7 +9,8 @@ type TextFieldProps = {
   placeholder: string;
   value: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-};
+  error?: string;
+} & InputHTMLAttributes<HTMLInputElement>;
 
 function TextField({ label, error, ...rest }: TextFieldProps) {
   const id = useId();
