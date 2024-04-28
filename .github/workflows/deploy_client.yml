@@ -1,7 +1,11 @@
-name: Deploy changes in client folder
+name: Deploy client
 
 on:
   workflow_dispatch:
+    inputs:
+      version:
+          description: 'Version in format 1.0.0'
+          required: true
 
 defaults:
   run:
@@ -46,3 +50,13 @@ jobs:
 
       - name: 'Deploy static site to S3 bucket'
         run: aws s3 sync ./build/ s3://word-trainer.shustal.tech --delete
+
+      - name: Set tag name
+        id: tag
+        run: echo "::set-output name=TAG_NAME::client_${{ github.event.inputs.version }}"
+
+      - name: 'Create Release'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tag.outputs.TAG_NAME }}
+          target_commitish: ${{ github.sha }}

@@ -1,4 +1,4 @@
-name: Test changes in client folder
+name: Test client
 
 on:
   push:
