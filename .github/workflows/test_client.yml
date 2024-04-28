@@ -1,5 +1,4 @@
-name: Check changes in client folder
-
+name: Test changes in client folder
 
 on:
   push:
@@ -18,14 +17,13 @@ defaults:
     shell: bash
     working-directory: ./client
 
-
 jobs:
   test-client-folder:
     name: 'Test client folder'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        name: 'Checkout repository'
+      - name: 'Checkout repository'
+        uses: actions/checkout@v4
 
       - name: 'Cache node_modules'
         uses: actions/cache@v4

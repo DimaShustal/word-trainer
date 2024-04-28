@@ -1,0 +1,48 @@
+name: Deploy changes in client folder
+
+on:
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+    working-directory: ./client
+
+env:
+  AWS_REGION: eu-central-1
+
+jobs:
+  deploy_client_folder:
+    name: 'Deploy client folder'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 'Checkout repository'
+        uses: actions/checkout@v4
+
+      - name: 'Configure AWS Credentials'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: 'Cache node_modules'
+        uses: actions/cache@v4
+        with:
+          path: ./client/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('client/**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: 'Install Dependencies'
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
+
+      - name: 'Generate Types'
+        run: yarn codegen
+
+      - name: 'Build client'
+        run: yarn build
+
+      - name: 'Deploy static site to S3 bucket'
+        run: aws s3 sync ./build/ s3://word-trainer.shustal.tech --delete
