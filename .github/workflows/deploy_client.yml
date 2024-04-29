@@ -15,6 +15,10 @@ defaults:
 env:
   AWS_REGION: eu-central-1
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   deploy_client_folder:
     name: 'Deploy client folder'
