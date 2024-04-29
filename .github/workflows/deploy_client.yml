@@ -56,7 +56,7 @@ jobs:
         run: yarn codegen
 
       - name: 'Build client'
-        run: CI=true yarn build
+        run: CI=false yarn build
 
       - name: 'Deploy static site to S3 bucket'
         run: aws s3 sync ./build/ s3://word-trainer.shustal.tech --delete
