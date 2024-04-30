@@ -17,7 +17,7 @@ env:
 
 permissions:
   id-token: write
-  contents: read
+  contents: write
 
 jobs:
   deploy_client_folder:
