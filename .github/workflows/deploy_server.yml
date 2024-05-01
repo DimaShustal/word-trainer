@@ -48,7 +48,7 @@ jobs:
           docker push ${{ steps.ecr-tag.outputs.ECR_TAG }}
 
       - name: 'Update image in Amazon EC2'
-        uses: appleboy/ssh-action@v1
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.AWS_EC2_HOST }}
           username: ${{ secrets.AWS_EC2_USER }}
