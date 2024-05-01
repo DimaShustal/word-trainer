@@ -1,25 +1,25 @@
-name: Test client
+name: Test server
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'client/**'
+      - 'server/**'
   pull_request:
     branches:
       - main
     paths:
-      - 'client/**'
+      - 'server/**'
 
 defaults:
   run:
     shell: bash
-    working-directory: ./client
+    working-directory: ./server
 
 jobs:
-  test-client-folder:
-    name: 'Test client folder'
+  test-server-folder:
+    name: 'Test server folder'
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout repository'
@@ -33,17 +33,14 @@ jobs:
       - name: 'Cache node_modules'
         uses: actions/cache@v4
         with:
-          path: ./client/node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('client/**/yarn.lock') }}
+          path: ./server/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('server/**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-node-
 
       - name: 'Install Dependencies'
         if: steps.cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
-
-      - name: 'Generate Types'
-        run: yarn codegen
 
       - name: 'Run Tests'
         run: yarn test

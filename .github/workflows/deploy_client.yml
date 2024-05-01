@@ -60,12 +60,12 @@ jobs:
       - name: 'Deploy static site to S3 bucket'
         run: aws s3 sync ./build/ s3://word-trainer.shustal.tech --delete
 
-      - name: 'Set tag name'
-        id: tag
+      - name: 'Set TAG_NAME'
+        id: tag-name
         run: echo "TAG_NAME=client_${{ github.event.inputs.version }}" >> "$GITHUB_OUTPUT"
 
       - name: 'Create Release'
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ steps.tag.outputs.TAG_NAME }}
+          tag_name: ${{ steps.tag-name.outputs.TAG_NAME }}
           target_commitish: ${{ github.sha }}

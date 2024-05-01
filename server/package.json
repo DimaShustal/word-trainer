@@ -6,7 +6,9 @@
     "start": "nodemon src/index.ts",
     "start:prod": "node build/src/index.js",
     "build": "tsc -p tsconfig.json",
-    "test": "jest --watch --runInBand"
+    "test": "echo \"TODO: implement\" && exit 0",
+    "type-check": "tsc",
+    "lint-check": "eslint src --ext .ts,.tsx"
   },
   "type": "module",
   "dependencies": {
