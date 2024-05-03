@@ -42,3 +42,11 @@ export const GlobalStyle = createGlobalStyle`
     cursor: pointer;
   }
 `;
+
+export const Version = styled.div`
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  font-size: 12px;
+  color: ${getColor('tertiary6')};
+`;

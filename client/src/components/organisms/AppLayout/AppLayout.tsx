@@ -1,5 +1,5 @@
 import { FC, ReactNode } from 'react';
-import { Main, GlobalStyle } from './AppLayout.style';
+import { Main, GlobalStyle, Version } from './AppLayout.style';
 import Header from '../Header/Header';
 import Content from '../../atoms/Content/Content';
 import AlertsPortal from '../AlertsPortal/AlertsPortal';
@@ -17,6 +17,7 @@ const AppLayout: FC<AppLayoutProps> = ({ children }) => {
       </Main>
       <GlobalStyle />
       <AlertsPortal />
+      <Version>v.{process.env.REACT_APP_VERSION}</Version>
     </>
   );
 };
