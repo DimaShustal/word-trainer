@@ -7,8 +7,6 @@ import { parseAuthorizationHeader } from './functions/authorization.js';
 import schema from './graphql/schema.js';
 import rootValue from './graphql/rootValue/index.js';
 
-// test code
-
 const PORT = 4000;
 const app = express();
 
@@ -34,7 +32,11 @@ app.all(
 );
 
 app.get('/healthcheck', (_, res) => {
-  res.send('OK');
+  res.send({ healthcheck: true });
+});
+
+app.get('/version', (_, res) => {
+  res.send({ version: process.env.VERSION });
 });
 
 app.use((req, res) => {

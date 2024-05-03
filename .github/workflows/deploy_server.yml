@@ -27,6 +27,11 @@ jobs:
       - name: 'Checkout repository'
         uses: actions/checkout@v4
 
+      - name: 'Create .env file'
+        run: |
+          sed -i~ '/^VERSION=/s/=.*/=${{ github.event.inputs.version }}/' .env.template
+          mv .env.template .env
+
       - name: 'Configure AWS Credentials'
         uses: aws-actions/configure-aws-credentials@v4
         with:
