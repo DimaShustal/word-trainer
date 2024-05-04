@@ -64,6 +64,7 @@ jobs:
           key: ${{ secrets.AWS_EC2_KEY }}
           script: |
             CONTAINER_ID=$(sudo docker ps -qf "ancestor=${{ steps.ecr-tag.outputs.ECR_TAG }}")
+            aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ steps.login-ecr.outputs.registry }}
             docker pull ${{ steps.ecr-tag.outputs.ECR_TAG }}
             docker restart $CONTAINER_ID
 
