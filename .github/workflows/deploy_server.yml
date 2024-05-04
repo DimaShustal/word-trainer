@@ -14,6 +14,7 @@ defaults:
 
 env:
   AWS_REGION: eu-central-1
+  ECR_REPOSITORY: word-trainer-api-amd64
 
 permissions:
   contents: write
@@ -47,14 +48,16 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: 'Set ECR_TAG'
+      - name: 'Set ECR tags'
         id: ecr-tag
-        run: echo "ECR_TAG=${{ steps.login-ecr.outputs.registry }}/word-trainer-api-amd64:latest" >> "$GITHUB_OUTPUT"
+        run: |
+          echo "LATEST=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest" >> "$GITHUB_OUTPUT"
+          echo "VERSION=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.event.inputs.version }}" >> "$GITHUB_OUTPUT"
 
       - name: 'Build, tag, and push docker image to Amazon ECR'
         run: |
-          docker build --platform linux/amd64 -t ${{ steps.ecr-tag.outputs.ECR_TAG }} .
-          docker push ${{ steps.ecr-tag.outputs.ECR_TAG }}
+          docker build --platform linux/amd64 -t ${{ steps.ecr-tag.outputs.LATEST }} -t ${{ steps.ecr-tag.outputs.VERSION }} .
+          docker push ${{ steps.ecr-tag.outputs.LATEST }}
 
       - name: 'Update image in Amazon EC2'
         uses: appleboy/ssh-action@v1.0.3
@@ -63,17 +66,19 @@ jobs:
           username: ${{ secrets.AWS_EC2_USER }}
           key: ${{ secrets.AWS_EC2_KEY }}
           script: |
-            CONTAINER_ID=$(sudo docker ps -qf "ancestor=${{ steps.ecr-tag.outputs.ECR_TAG }}")
+            docker stop ${{ env.ECR_REPOSITORY }}
+            docker rm ${{ env.ECR_REPOSITORY }}
+            docker rmi -f $(docker images -aq)
             aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ steps.login-ecr.outputs.registry }}
-            docker pull ${{ steps.ecr-tag.outputs.ECR_TAG }}
-            docker restart $CONTAINER_ID
+            docker pull ${{ steps.ecr-tag.outputs.LATEST }}
+            docker run -d -p 80:4000 -p 443:4000 --name ${{ env.ECR_REPOSITORY }} ${{ steps.ecr-tag.outputs.LATEST }}
 
       - name: 'Set TAG_NAME'
-        id: tag-name
+        id: github-tag
         run: echo "TAG_NAME=server_${{ github.event.inputs.version }}" >> "$GITHUB_OUTPUT"
 
       - name: 'Create Release'
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ steps.tag-name.outputs.TAG_NAME }}
+          tag_name: ${{ steps.github-tag.outputs.TAG_NAME }}
           target_commitish: ${{ github.sha }}
