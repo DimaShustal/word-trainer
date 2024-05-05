@@ -9,11 +9,12 @@ import rootValue from './graphql/rootValue/index.js';
 
 const PORT = 4000;
 const app = express();
+const MONGODB_URL =
+  process.env.MONGODB_URL ||
+  `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@word-trainer.izhine7.mongodb.net/app?retryWrites=true&w=majority&appName=word-trainer`;
 
 mongoose
-  .connect(
-    `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@word-trainer.izhine7.mongodb.net/app?retryWrites=true&w=majority&appName=word-trainer`,
-  )
+  .connect(MONGODB_URL)
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));
 
