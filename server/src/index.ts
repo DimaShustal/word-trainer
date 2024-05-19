@@ -29,6 +29,11 @@ app.all(
 
       return { user };
     },
+    formatError: error => {
+      console.error('/graphql error:', error);
+
+      return { message: error?.message } as Error;
+    },
   }),
 );
 
