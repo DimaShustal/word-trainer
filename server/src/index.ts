@@ -7,6 +7,7 @@ import { rateLimit } from 'express-rate-limit';
 import { parseAuthorizationHeader } from './functions/authorization.js';
 import schema from './graphql/schema.js';
 import rootValue from './graphql/rootValue/index.js';
+import { MINUTE_IN_MILLISECONDS } from './constants/time.js';
 
 const PORT = 4000;
 const app = express();
@@ -14,7 +15,7 @@ const MONGODB_URL =
   process.env.MONGODB_URL ||
   `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@word-trainer.izhine7.mongodb.net/app?retryWrites=true&w=majority&appName=word-trainer`;
 const limiter = rateLimit({
-  windowMs: 10 * 60 * 1000,
+  windowMs: 10 * MINUTE_IN_MILLISECONDS,
   limit: 50,
   message: { error: 'Try later' },
 });
@@ -25,7 +26,9 @@ mongoose
   .catch(err => console.error('MongoDB connection error:', err));
 
 app.use(cors());
+
 app.use('/graphql', limiter);
+
 app.all(
   '/graphql',
   createHandler({
