@@ -34,7 +34,7 @@ jobs:
           echo GOOGLE_TRANSLATE_API_KEY=${{ secrets.SERVER_GOOGLE_TRANSLATE_API_KEY }} >> .env
           echo JWT_SECRET_KEY=${{ secrets.SERVER_JWT_SECRET_KEY }} >> .env
           echo MONGODB_PASSWORD=${{ secrets.SERVER_MONGODB_PASSWORD }} >> .env
-          echo MONGODB_USERNAME=${{ secrets.MONGODB_USERNAME }} >> .env
+          echo MONGODB_USERNAME=${{ secrets.SERVER_MONGODB_USERNAME }} >> .env
           echo VERSION=${{ github.event.inputs.version }} >> .env
 
       - name: 'Configure AWS Credentials'
