@@ -5,8 +5,6 @@ import loginValidationSchema from '../../../constants/loginValidationSchema.js';
 import db from '../../../db/index.js';
 
 async function login({ name, password }: IUserCredentials): Promise<string> {
-  await new Promise(resolve => setTimeout(resolve, 3000));
-
   await loginValidationSchema.validate({ name, password }, { abortEarly: false });
 
   const user = await db.User.findOne({ name }, { id: 1, name: 1, passwordHash: 1 });

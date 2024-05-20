@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import createUser from './handlers/createUser.js';
 import login from './handlers/login.js';
 import user from './handlers/user.js';
@@ -8,25 +6,17 @@ import userWords from './handlers/userWords.js';
 import addWordsFromTranslation from './handlers/addWordsFromTranslation.js';
 import updateWords from './handlers/updateWords.js';
 import removeWords from './handlers/removeWords.js';
-import { SECOND_IN_MILLISECONDS } from '../../constants/time.js';
-
-const requestTimeout = async () => {
-  await new Promise(resolve => setTimeout(resolve, SECOND_IN_MILLISECONDS));
-
-  return new Error('Try later');
-};
+import withTimeout from '../../functions/withTimeout.js';
 
 const rootValue = {
-  createUser,
-  login: (...args) => {
-    return Promise.race([login(...args), requestTimeout()]);
-  },
-  user,
-  languages,
-  userWords,
-  addWordsFromTranslation,
-  updateWords,
-  removeWords,
+  createUser: withTimeout<typeof createUser>(createUser),
+  login: withTimeout<typeof login>(login),
+  user: withTimeout<typeof user>(user),
+  languages: withTimeout<typeof languages>(languages),
+  userWords: withTimeout<typeof userWords>(userWords),
+  addWordsFromTranslation: withTimeout<typeof addWordsFromTranslation>(addWordsFromTranslation),
+  updateWords: withTimeout<typeof updateWords>(updateWords),
+  removeWords: withTimeout<typeof removeWords>(removeWords),
 };
 
 export default rootValue;
