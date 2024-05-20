@@ -9,14 +9,14 @@ import removeWords from './handlers/removeWords.js';
 import withTimeout from '../../functions/withTimeout.js';
 
 const rootValue = {
-  createUser: withTimeout<typeof createUser>(createUser),
-  login: withTimeout<typeof login>(login),
-  user: withTimeout<typeof user>(user),
-  languages: withTimeout<typeof languages>(languages),
-  userWords: withTimeout<typeof userWords>(userWords),
-  addWordsFromTranslation: withTimeout<typeof addWordsFromTranslation>(addWordsFromTranslation),
-  updateWords: withTimeout<typeof updateWords>(updateWords),
-  removeWords: withTimeout<typeof removeWords>(removeWords),
+  createUser: withTimeout(createUser),
+  login: withTimeout(login),
+  user: withTimeout(user),
+  languages: withTimeout(languages),
+  userWords: withTimeout(userWords),
+  addWordsFromTranslation: withTimeout(addWordsFromTranslation),
+  updateWords: withTimeout(updateWords),
+  removeWords: withTimeout(removeWords),
 };
 
 export default rootValue;
