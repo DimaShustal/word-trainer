@@ -7,10 +7,13 @@ import Stack from '../../atoms/Stack';
 import Button from '../../atoms/Button';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { TouchBackend } from 'react-dnd-touch-backend';
 import DraggableItem from '../../atoms/DraggableItem/DraggableItem';
 import { ICheckedPhrasePart, IPhrasePart, IWord } from '../../../types/Word';
 import { Navigate } from 'react-router-dom';
 import { ALL_WORDS_PATH } from '../../../constants/path';
+import useResolutionType from '../../../functions/useResolutionType';
+import { RESOLUTION_TYPES } from '../../../constants/resolution';
 
 interface IPhraseConstructorProps {
   refresh: () => void;
@@ -30,6 +33,8 @@ function PhraseConstructor({ refresh }: IPhraseConstructorProps) {
     randomizePhraseParts(phrase.current?.phraseParts || []),
   );
   const [answers, setAnswers] = useState<ICheckedPhrasePart[]>([]);
+  const resolutionType = useResolutionType();
+  const isDesktop = resolutionType === RESOLUTION_TYPES.DESKTOP;
 
   const moveAnswer = (fromIndex: number, toIndex: number) => {
     const updatedAnswers = [...answers];
@@ -71,7 +76,7 @@ function PhraseConstructor({ refresh }: IPhraseConstructorProps) {
           {phrase.current?.translation}
         </Typography>
 
-        <DndProvider backend={HTML5Backend}>
+        <DndProvider backend={isDesktop ? HTML5Backend : TouchBackend}>
           <AnswerContainer>
             {answers.map((answer, index) => (
               <DraggableItem key={answer.id} id={answer.id} index={index} moveCard={moveAnswer}>

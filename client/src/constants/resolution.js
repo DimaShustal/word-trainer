@@ -1,0 +1,10 @@
+export const RESOLUTION_TYPES = {
+  PHONE: 'PHONE',
+  TABLET: 'TABLET',
+  DESKTOP: 'DESKTOP',
+};
+
+export const RESOLUTION_WIDTHS = {
+  PHONE: 576,
+  TABLET: 768,
+};
