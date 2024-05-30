@@ -4,6 +4,7 @@ interface LanguageRegex {
 
 const LANGUAGE_REGEX: LanguageRegex = {
   ru: 'а-я',
+  pl: 'a-ząćęłńóśźż',
 };
 
 function getNormalizedWord(word: string, languageCode: string) {
