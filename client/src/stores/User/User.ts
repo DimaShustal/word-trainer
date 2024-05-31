@@ -1,4 +1,4 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, toJS } from 'mobx';
 import AppStore from '../AppStore';
 import api from '../../functions/api';
 import { LOCAL_STORAGE_KEYS } from '../../constants/storage';
@@ -6,7 +6,7 @@ import { ROOT_PATH } from '../../constants/path';
 import UserApi from './UserApi';
 import { ApolloError } from '@apollo/client';
 import normalizeYupError from '../../functions/normalizeGraphqlError';
-import { User as UserGraphql } from '../../__generated__/graphql';
+import { Language, User as UserGraphql } from '../../__generated__/graphql';
 
 class User {
   currentLanguageId: string | undefined;
@@ -21,6 +21,12 @@ class User {
     makeAutoObservable(this);
 
     this.isLogged = !!localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN);
+  }
+
+  get language(): Language | undefined {
+    if (!this.currentLanguageId || !this.store.languages.list) return undefined;
+
+    return toJS(this.store.languages.list.find(language => language.id === this.currentLanguageId));
   }
 
   setLanguage = (languageId: string): void => {

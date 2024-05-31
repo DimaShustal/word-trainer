@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { MutableRefObject, useEffect, useRef } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useAppContext } from '../../../contexts/AppContext';
 import Loader from '../../atoms/Loader/Loader';
@@ -6,12 +6,27 @@ import { Container, WordContainer, AddButton } from './AllWordsPage.style';
 import Stack from '../../atoms/Stack';
 import Button from '../../atoms/Button';
 import Typography from '../../atoms/Typography';
-import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
+import { DeleteOutlined, PlusOutlined, SoundOutlined } from '@ant-design/icons';
 import { Navigate } from 'react-router-dom';
 import { ADD_WORDS_PATH, ALL_LANGUAGES_PATH } from '../../../constants/path';
+import pronounceText from '../../../functions/pronounceText';
+
+type SpeedList = {
+  [key: string]: boolean;
+};
 
 function AllWordsPage() {
   const { store } = useAppContext();
+  const languageCode = store.user.language?.code || '';
+  const pronounceTextSpeedList: MutableRefObject<SpeedList> = useRef({});
+
+  const pronounceTextFn = (text: string, id: string) => {
+    const speedListValue = pronounceTextSpeedList.current[id] ?? true;
+    const speed = speedListValue ? 1 : 0.5;
+
+    pronounceTextSpeedList.current[id] = !speedListValue;
+    pronounceText(text, languageCode, speed);
+  };
 
   useEffect(() => {
     if (!store.wordList.isLoaded) store.wordList.fetchWords();
@@ -42,10 +57,10 @@ function AllWordsPage() {
             </Typography>
           </Stack>
           <Stack gap={10}>
-            <Button type="text" size="medium" onClick={() => null}>
-              Статус
-            </Button>
-            <Button type="icon" Icon={EditOutlined} size="small" onClick={() => null} />
+            {/*<Button type="text" size="medium" onClick={() => null}>*/}
+            {/*  Статус*/}
+            {/*</Button>*/}
+            <Button type="icon" Icon={SoundOutlined} size="small" onClick={() => pronounceTextFn(word, id)} />
             <Button type="icon" Icon={DeleteOutlined} size="small" onClick={() => store.wordList.removeWords([id])} />
           </Stack>
         </WordContainer>
