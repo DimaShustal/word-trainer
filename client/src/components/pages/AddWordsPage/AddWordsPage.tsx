@@ -49,6 +49,8 @@ const AddWordsPage = () => {
 
       await validationSchema.validate({ translations, separator }, { abortEarly: false });
       await store.wordList.addWordsFromTranslation(translations.split(separator));
+
+      setTranslations('');
     } catch (error) {
       if (error instanceof yup.ValidationError) {
         const yupErrors = normalizeYupError(error);
