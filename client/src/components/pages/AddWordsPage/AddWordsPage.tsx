@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { Container } from './AddWordsPage.style';
 import TextField from '../../atoms/TextField/TextField';
 import Button from '../../atoms/Button';
@@ -30,6 +30,8 @@ const AddWordsPage = () => {
   const [translationsError, setTranslationsError] = useState('');
   const [separatorError, setSeparatorError] = useState('');
 
+  const isProcessing = useRef(false);
+
   const inputHandler = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.name === 'translations') {
       setTranslations(e.target.value);
@@ -43,7 +45,10 @@ const AddWordsPage = () => {
   };
 
   const createWordsFromTranslations = async () => {
+    if (isProcessing.current) return;
+
     try {
+      isProcessing.current = true;
       setTranslationsError('');
       setSeparatorError('');
 
@@ -61,6 +66,8 @@ const AddWordsPage = () => {
         console.error('AddWordsPage.createWordsFromTranslations', error);
       }
     }
+
+    isProcessing.current = false;
   };
 
   useEffect(() => {
