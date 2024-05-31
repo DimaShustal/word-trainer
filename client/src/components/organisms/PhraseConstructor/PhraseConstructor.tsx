@@ -14,6 +14,7 @@ import { Navigate } from 'react-router-dom';
 import { ALL_WORDS_PATH } from '../../../constants/path';
 import useResolutionType from '../../../functions/useResolutionType';
 import { RESOLUTION_TYPES } from '../../../constants/resolution';
+import pronounceText from '../../../functions/pronounceText';
 
 interface IPhraseConstructorProps {
   refresh: () => void;
@@ -35,6 +36,14 @@ function PhraseConstructor({ refresh }: IPhraseConstructorProps) {
   const [answers, setAnswers] = useState<ICheckedPhrasePart[]>([]);
   const resolutionType = useResolutionType();
   const isDesktop = resolutionType === RESOLUTION_TYPES.DESKTOP;
+
+  const pronounceTextAndRefresh = async () => {
+    if (phrase.current && store.user.language) {
+      await pronounceText(phrase.current.word, store.user.language.code);
+    }
+
+    refresh();
+  };
 
   const moveAnswer = (fromIndex: number, toIndex: number) => {
     const updatedAnswers = [...answers];
@@ -61,7 +70,7 @@ function PhraseConstructor({ refresh }: IPhraseConstructorProps) {
     }
 
     phrase.current?.updateLastUse();
-    refresh();
+    pronounceTextAndRefresh();
   };
 
   if (!phrase.current) {
@@ -99,7 +108,7 @@ function PhraseConstructor({ refresh }: IPhraseConstructorProps) {
         <Button type="primary" size="medium" disabled={!!phraseParts.length} onClick={checkAnswers}>
           Проверить
         </Button>
-        <Button type="text" size="medium" onClick={() => refresh()}>
+        <Button type="text" size="medium" onClick={pronounceTextAndRefresh}>
           Не знаю
         </Button>
       </Stack>
